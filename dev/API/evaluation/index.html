@@ -566,8 +566,20 @@
   
   
     <li class="md-nav__item">
-      <a href="../models/" class="md-nav__link">
-        Models
+      <a href="../classifiers/" class="md-nav__link">
+        Classifiers
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../detectors/" class="md-nav__link">
+        Detectors
       </a>
     </li>
   
@@ -610,6 +622,73 @@
     </label>
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
+        <li class="md-nav__item">
+  <a href="#score-combination" class="md-nav__link">
+    Score Combination
+  </a>
+  
+    <nav class="md-nav" aria-label="Score Combination">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#combine" class="md-nav__link">
+    combine
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#score-normalization" class="md-nav__link">
+    Score Normalization
+  </a>
+  
+    <nav class="md-nav" aria-label="Score Normalization">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#normalize" class="md-nav__link">
+    normalize
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#unify" class="md-nav__link">
+    unify
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#score-thresholding" class="md-nav__link">
+    Score Thresholding
+  </a>
+  
+    <nav class="md-nav" aria-label="Score Thresholding">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#classify" class="md-nav__link">
+    classify
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -649,6 +728,73 @@
     </label>
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
+        <li class="md-nav__item">
+  <a href="#score-combination" class="md-nav__link">
+    Score Combination
+  </a>
+  
+    <nav class="md-nav" aria-label="Score Combination">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#combine" class="md-nav__link">
+    combine
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#score-normalization" class="md-nav__link">
+    Score Normalization
+  </a>
+  
+    <nav class="md-nav" aria-label="Score Normalization">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#normalize" class="md-nav__link">
+    normalize
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#unify" class="md-nav__link">
+    unify
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#score-thresholding" class="md-nav__link">
+    Score Thresholding
+  </a>
+  
+    <nav class="md-nav" aria-label="Score Thresholding">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#classify" class="md-nav__link">
+    classify
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -669,7 +815,125 @@
                 <p><a id='Evaluation'></a></p>
 <p><a id='Evaluation-1'></a></p>
 <h1 id="evaluation">Evaluation</h1>
-<p>TODO</p>
+<p>Raw evaluation methods that are typically used by a <a href="../base/#OutlierDetection.Classifier"><code>Classifier</code></a>, see <a href="../classifiers/#OutlierDetection.Binarize"><code>Binarize</code></a> for an exemplary usage.</p>
+<p><a id='Score-Combination'></a></p>
+<p><a id='Score-Combination-1'></a></p>
+<h2 id="score-combination">Score Combination</h2>
+<p><a id='combine'></a></p>
+<p><a id='combine-1'></a></p>
+<h3 id="combine">combine</h3>
+<p><a id='OutlierDetection.combine' href='#OutlierDetection.combine'>#</a>
+<strong><code>OutlierDetection.combine</code></strong> &mdash; <em>Function</em>.</p>
+<div class="highlight"><pre><span></span><code><span class="n">combine</span><span class="p">(</span><span class="n">scores_mat</span><span class="p">,</span>
+        <span class="n">strategy</span> <span class="o">=</span> <span class="o">:</span><span class="n">mean</span><span class="p">)</span>
+</code></pre></div>
+<p>Combination method to merge outlier scores from multiple detectors by using a combination strateg. This function is typically used within a <a href="../base/#OutlierDetection.Classifier"><code>Classifier</code></a>. TODO: Add AOM/MOA/LSCP combination strategies </p>
+<p><strong>Parameters</strong></p>
+<div class="highlight"><pre><span></span><code>scores_mat::AbstractMatrix{T}
+</code></pre></div>
+<p>A matrix, with each row representing the scores for a specific instance and each column representing a detector.</p>
+<div class="highlight"><pre><span></span><code>strategy::Symbol=:mean
+</code></pre></div>
+<p>Determines how to combine the scores of multiple detectors, e.g. maximum or mean of all scores.</p>
+<p><strong>Returns</strong></p>
+<div class="highlight"><pre><span></span><code>combined_scores::AbstractVector{T}
+</code></pre></div>
+<p>The combined scores.e.g. the maximum of scores from different detectors.</p>
+<p><strong>Examples</strong></p>
+<div class="highlight"><pre><span></span><code>scores = [1 2; 3 4; 5 6]
+combine(scores) # [1.5, 3.5, 5.5]
+</code></pre></div>
+<p><a target='_blank' href='https://github.com/davnn/OutlierDetection.jl/blob/fd099014532a5e38aad2b9ffd087628131841aad/src/evaluate/evaluate.jl#LL10-L34' class='documenter-source'>source</a><br></p>
+<p><a id='Score-Normalization'></a></p>
+<p><a id='Score-Normalization-1'></a></p>
+<h2 id="score-normalization">Score Normalization</h2>
+<p><a id='normalize'></a></p>
+<p><a id='normalize-1'></a></p>
+<h3 id="normalize">normalize</h3>
+<p><a id='OutlierDetection.normalize' href='#OutlierDetection.normalize'>#</a>
+<strong><code>OutlierDetection.normalize</code></strong> &mdash; <em>Function</em>.</p>
+<div class="highlight"><pre><span></span><code><span class="n">normalize</span><span class="p">(</span><span class="n">scoresTrain</span><span class="p">,</span>
+          <span class="n">scoresTest</span><span class="p">)</span>
+</code></pre></div>
+<p>Transform an array of scores into a range between [0,1] using min-max scaling.</p>
+<p><strong>Parameters</strong></p>
+<div class="highlight"><pre><span></span><code>scores_train::AbstractVector{&lt;:Real}
+</code></pre></div>
+<p>A vector of training scores, typically the result of <a href="../base/#OutlierDetection.fit"><code>fit</code></a> with a detector.</p>
+<div class="highlight"><pre><span></span><code>scores_test::AbstractVector{&lt;:Real}
+</code></pre></div>
+<p>A vector of test scores, typically the result of <a href="../base/#OutlierDetection.score"><code>score</code></a> using a previously fitted detector.</p>
+<p><strong>Returns</strong></p>
+<div class="highlight"><pre><span></span><code>normalized_scores::Tuple{AbstractVector{&lt;:Real}, AbstractVector{&lt;:Real}}
+</code></pre></div>
+<p>The normalized train and test scores.</p>
+<p><strong>Examples</strong></p>
+<div class="highlight"><pre><span></span><code>scores_train, scores_test = ([1, 2, 3], [4, 3, 2, 1, 0])
+normalize(scores_train, scores_test) # ([0.0, 0.5, 1.0], [1.0, 1.0, 0.5, 0.0, 0.0])
+normalize(scores_train) # [0.0, 0.5, 1.0]
+</code></pre></div>
+<p><a target='_blank' href='https://github.com/davnn/OutlierDetection.jl/blob/fd099014532a5e38aad2b9ffd087628131841aad/src/evaluate/evaluate.jl#LL50-L70' class='documenter-source'>source</a><br></p>
+<p><a id='unify'></a></p>
+<p><a id='unify-1'></a></p>
+<h3 id="unify">unify</h3>
+<p><a id='OutlierDetection.unify' href='#OutlierDetection.unify'>#</a>
+<strong><code>OutlierDetection.unify</code></strong> &mdash; <em>Function</em>.</p>
+<div class="highlight"><pre><span></span><code><span class="n">unify</span><span class="p">(</span><span class="n">scores_train</span><span class="p">,</span>
+      <span class="n">scores_test</span><span class="p">)</span>
+</code></pre></div>
+<p>Transform an array of scores into a range between [0,1] using unifying scores as described in [1].</p>
+<p><strong>Parameters</strong></p>
+<div class="highlight"><pre><span></span><code>scores_train::AbstractVector{&lt;:Real}
+</code></pre></div>
+<p>A vector of training scores, typically the result of <a href="../base/#OutlierDetection.fit"><code>fit</code></a> with a detector.</p>
+<div class="highlight"><pre><span></span><code>scores_test::AbstractVector{&lt;:Real}
+</code></pre></div>
+<p>A vector of test scores, typically the result of <a href="../base/#OutlierDetection.score"><code>score</code></a> using a previously fitted detector.</p>
+<p><strong>Returns</strong></p>
+<div class="highlight"><pre><span></span><code>unified_scores::Tuple{AbstractVector{&lt;:Real}, AbstractVector{&lt;:Real}}
+</code></pre></div>
+<p>The unified train and test scores.</p>
+<p><strong>Examples</strong></p>
+<div class="highlight"><pre><span></span><code>scores_train, scores_test = ([1, 2, 3], [4, 3, 2, 1, 0])
+unify(scores_train, scores_test) # ([0.0, 0.0, 0.68..], [0.95.., 0.68.., 0.0, 0.0, 0.0])
+unify(scores_train) # [0.0, 0.0, 0.68..]
+</code></pre></div>
+<p><strong>References</strong></p>
+<p>Kriegel, Hans-Peter; Kroger, Peer; Schubert, Erich; Zimek, Arthur (2011): Interpreting and Unifying Outlier Scores.</p>
+<p><a target='_blank' href='https://github.com/davnn/OutlierDetection.jl/blob/fd099014532a5e38aad2b9ffd087628131841aad/src/evaluate/evaluate.jl#LL80-L104' class='documenter-source'>source</a><br></p>
+<p><a id='Score-Thresholding'></a></p>
+<p><a id='Score-Thresholding-1'></a></p>
+<h2 id="score-thresholding">Score Thresholding</h2>
+<p><a id='classify'></a></p>
+<p><a id='classify-1'></a></p>
+<h3 id="classify">classify</h3>
+<p><a id='OutlierDetection.classify' href='#OutlierDetection.classify'>#</a>
+<strong><code>OutlierDetection.classify</code></strong> &mdash; <em>Function</em>.</p>
+<div class="highlight"><pre><span></span><code><span class="n">classify</span><span class="p">(</span><span class="n">outlier_fraction</span><span class="p">,</span>
+         <span class="n">scores_train</span><span class="p">,</span>
+         <span class="n">scores_test</span><span class="p">)</span>
+</code></pre></div>
+<p>Convert an array of scores to an array of classes with <code>1</code> indicating normal data and <code>-1</code> indicating outliers. The conversion is based on percentiles of the training data, i.e. all datapoints above the <code>1 - outlier_fraction</code> percentile are considered outliers.</p>
+<p><strong>Parameters</strong></p>
+<div class="highlight"><pre><span></span><code>outlier_fraction::Real
+</code></pre></div>
+<p>The fraction of outliers (number between 0 and 1) in the data used to determine the score threshold to classify the samples into inliers and outliers.</p>
+<div class="highlight"><pre><span></span><code>scores_train::AbstractVector{&lt;:Real}
+</code></pre></div>
+<p>A vector of training scores, typically the result of <a href="../base/#OutlierDetection.fit"><code>fit</code></a> with a detector.</p>
+<div class="highlight"><pre><span></span><code>scores_test::AbstractVector{&lt;:Real}
+</code></pre></div>
+<p>A vector of test scores, typically the result of <a href="../base/#OutlierDetection.score"><code>score</code></a> using a previously fitted detector.</p>
+<p><strong>Returns</strong></p>
+<div class="highlight"><pre><span></span><code>classes::AbstractVector{&lt;:Integer}
+</code></pre></div>
+<p>The vector of classes consisting of <code>-1</code> (outlier) and <code>1</code> (inlier) elements.</p>
+<p><strong>Examples</strong></p>
+<div class="highlight"><pre><span></span><code>scores_train, scores_test = ([1, 2, 3], [4, 3, 2, 1, 0])
+classify(0.3, scores_train, scores_test) # [-1, -1, 1, 1, 1]
+classify(0.3, scores_train) # [1, 1, -1]
+</code></pre></div>
+<p><a target='_blank' href='https://github.com/davnn/OutlierDetection.jl/blob/fd099014532a5e38aad2b9ffd087628131841aad/src/evaluate/evaluate.jl#LL114-L141' class='documenter-source'>source</a><br></p>
                 
               
               
@@ -688,7 +952,7 @@
   
     <nav class="md-footer__inner md-grid" aria-label="Footer">
       
-        <a href="../models/" class="md-footer__link md-footer__link--prev" rel="prev">
+        <a href="../detectors/" class="md-footer__link md-footer__link--prev" rel="prev">
           <div class="md-footer__button md-icon">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
           </div>
@@ -697,7 +961,7 @@
               <span class="md-footer__direction">
                 Previous
               </span>
-              Models
+              Detectors
             </div>
           </div>
         </a>

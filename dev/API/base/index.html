@@ -616,8 +616,15 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#detectormodel" class="md-nav__link">
-    DetectorModel
+  <a href="#classifier" class="md-nav__link">
+    Classifier
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#model" class="md-nav__link">
+    Model
   </a>
   
 </li>
@@ -630,6 +637,13 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#data" class="md-nav__link">
+    Data
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#labels" class="md-nav__link">
     Labels
   </a>
@@ -637,8 +651,15 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#data" class="md-nav__link">
-    Data
+  <a href="#fit" class="md-nav__link">
+    Fit
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#result" class="md-nav__link">
+    Result
   </a>
   
 </li>
@@ -657,15 +678,22 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#fit" class="md-nav__link">
+  <a href="#fit_1" class="md-nav__link">
     fit
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#transform" class="md-nav__link">
-    transform
+  <a href="#score" class="md-nav__link">
+    score
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#detect" class="md-nav__link">
+    detect
   </a>
   
 </li>
@@ -688,8 +716,20 @@
   
   
     <li class="md-nav__item">
-      <a href="../models/" class="md-nav__link">
-        Models
+      <a href="../classifiers/" class="md-nav__link">
+        Classifiers
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../detectors/" class="md-nav__link">
+        Detectors
       </a>
     </li>
   
@@ -768,8 +808,15 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#detectormodel" class="md-nav__link">
-    DetectorModel
+  <a href="#classifier" class="md-nav__link">
+    Classifier
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#model" class="md-nav__link">
+    Model
   </a>
   
 </li>
@@ -782,6 +829,13 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#data" class="md-nav__link">
+    Data
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#labels" class="md-nav__link">
     Labels
   </a>
@@ -789,8 +843,15 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#data" class="md-nav__link">
-    Data
+  <a href="#fit" class="md-nav__link">
+    Fit
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#result" class="md-nav__link">
+    Result
   </a>
   
 </li>
@@ -809,15 +870,22 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#fit" class="md-nav__link">
+  <a href="#fit_1" class="md-nav__link">
     fit
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#transform" class="md-nav__link">
-    transform
+  <a href="#score" class="md-nav__link">
+    score
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#detect" class="md-nav__link">
+    detect
   </a>
   
 </li>
@@ -847,7 +915,7 @@
                 <p><a id='Base'></a></p>
 <p><a id='Base-1'></a></p>
 <h1 id="base">Base</h1>
-<p>Here we define the abstract supertypes that all outlier detectors share as well as the necessary <a href="./#OutlierDetection.fit"><code>fit</code></a> and <a href="./#OutlierDetection.transform"><code>transform</code></a> methods that have to be implemented for each detector.</p>
+<p>Here we define the abstract supertypes that all outlier detectors share as well as the necessary <a href="./#OutlierDetection.fit"><code>fit</code></a> and <a href="./#OutlierDetection.score"><code>score</code></a> methods that have to be implemented for each detector.</p>
 <p><a id='Types'></a></p>
 <p><a id='Types-1'></a></p>
 <h2 id="types">Types</h2>
@@ -859,7 +927,7 @@
 <div class="highlight"><pre><span></span><code><span class="n">Detector</span><span class="o">::</span><span class="kt">Union</span><span class="p">{</span><span class="o">&lt;:</span><span class="n">SupervisedDetector</span><span class="p">,</span> <span class="o">&lt;:</span><span class="n">UnsupervisedDetector</span><span class="p">}</span>
 </code></pre></div>
 <p>The union type of all implemented detectors, including supervised, semi-supervised and unsupervised detectors. <em>Note:</em> A semi-supervised detector can be seen as a supervised detector with a specific class representing unlabeled data.</p>
-<p><a target='_blank' href='https://github.com/davnn/OutlierDetection.jl/blob/277057b3ce6ae4a8c39c557aed9b2edeb4643b99/src/base.jl#LL19-L24' class='documenter-source'>source</a><br></p>
+<p><a target='_blank' href='https://github.com/davnn/OutlierDetection.jl/blob/fd099014532a5e38aad2b9ffd087628131841aad/src/base.jl#LL21-L26' class='documenter-source'>source</a><br></p>
 <p><a id='SupervisedDetector'></a></p>
 <p><a id='SupervisedDetector-1'></a></p>
 <h3 id="superviseddetector">SupervisedDetector</h3>
@@ -867,8 +935,8 @@
 <strong><code>OutlierDetection.SupervisedDetector</code></strong> &mdash; <em>Type</em>.</p>
 <div class="highlight"><pre><span></span><code><span class="n">SupervisedDetector</span>
 </code></pre></div>
-<p>This abstract type forms the basis for all implemented supervised outlier detection algorithms. To implement a new <code>SupervisedDetector</code> yourself, you have to implement the <code>fit(detector, X, y)::DetectorModel</code> and <code>transform(detector, model, X)::Scores</code> methods. </p>
-<p><a target='_blank' href='https://github.com/davnn/OutlierDetection.jl/blob/277057b3ce6ae4a8c39c557aed9b2edeb4643b99/src/base.jl#LL10-L16' class='documenter-source'>source</a><br></p>
+<p>This abstract type forms the basis for all implemented supervised outlier detection algorithms. To implement a new <code>SupervisedDetector</code> yourself, you have to implement the <code>fit(detector, X, y)::Fit</code> and <code>score(detector, model, X)::Result</code> methods. </p>
+<p><a target='_blank' href='https://github.com/davnn/OutlierDetection.jl/blob/fd099014532a5e38aad2b9ffd087628131841aad/src/base.jl#LL12-L18' class='documenter-source'>source</a><br></p>
 <p><a id='UnsupervisedDetector'></a></p>
 <p><a id='UnsupervisedDetector-1'></a></p>
 <h3 id="unsuperviseddetector">UnsupervisedDetector</h3>
@@ -876,17 +944,26 @@
 <strong><code>OutlierDetection.UnsupervisedDetector</code></strong> &mdash; <em>Type</em>.</p>
 <div class="highlight"><pre><span></span><code><span class="n">UnsupervisedDetector</span>
 </code></pre></div>
-<p>This abstract type forms the basis for all implemented unsupervised outlier detection algorithms. To implement a new <code>UnsupervisedDetector</code> yourself, you have to implement the <code>fit(detector, X)::DetectorModel</code> and <code>transform(detector, model, X)::Scores</code> methods. </p>
-<p><a target='_blank' href='https://github.com/davnn/OutlierDetection.jl/blob/277057b3ce6ae4a8c39c557aed9b2edeb4643b99/src/base.jl#LL1-L7' class='documenter-source'>source</a><br></p>
-<p><a id='DetectorModel'></a></p>
-<p><a id='DetectorModel-1'></a></p>
-<h3 id="detectormodel">DetectorModel</h3>
-<p><a id='OutlierDetection.DetectorModel' href='#OutlierDetection.DetectorModel'>#</a>
-<strong><code>OutlierDetection.DetectorModel</code></strong> &mdash; <em>Type</em>.</p>
-<div class="highlight"><pre><span></span><code><span class="n">DetectorModel</span>
+<p>This abstract type forms the basis for all implemented unsupervised outlier detection algorithms. To implement a new <code>UnsupervisedDetector</code> yourself, you have to implement the <code>fit(detector, X)::Fit</code> and <code>score(detector, model, X)::Result</code> methods. </p>
+<p><a target='_blank' href='https://github.com/davnn/OutlierDetection.jl/blob/fd099014532a5e38aad2b9ffd087628131841aad/src/base.jl#LL3-L9' class='documenter-source'>source</a><br></p>
+<p><a id='Classifier'></a></p>
+<p><a id='Classifier-1'></a></p>
+<h3 id="classifier">Classifier</h3>
+<p><a id='OutlierDetection.Classifier' href='#OutlierDetection.Classifier'>#</a>
+<strong><code>OutlierDetection.Classifier</code></strong> &mdash; <em>Type</em>.</p>
+<div class="highlight"><pre><span></span><code><span class="n">Classifier</span>
 </code></pre></div>
-<p>A <code>DetectorModel</code> represents the learned behaviour for specific detector. This might include parameters in parametric models or other repesentations of the learned data in nonparametric models. In essence, it includes everything required to transform an instance to an outlier score.</p>
-<p><a target='_blank' href='https://github.com/davnn/OutlierDetection.jl/blob/277057b3ce6ae4a8c39c557aed9b2edeb4643b99/src/base.jl#LL27-L33' class='documenter-source'>source</a><br></p>
+<p>A classifier uses one or more detector scores produced by <a href="./#OutlierDetection.score"><code>score</code></a> and transforms them into labels, typically with two classes describing inliers (<code>1</code>) and outliers (<code>-1</code>).</p>
+<p><a target='_blank' href='https://github.com/davnn/OutlierDetection.jl/blob/fd099014532a5e38aad2b9ffd087628131841aad/src/base.jl#LL29-L34' class='documenter-source'>source</a><br></p>
+<p><a id='Model'></a></p>
+<p><a id='Model-1'></a></p>
+<h3 id="model">Model</h3>
+<p><a id='OutlierDetection.Model' href='#OutlierDetection.Model'>#</a>
+<strong><code>OutlierDetection.Model</code></strong> &mdash; <em>Type</em>.</p>
+<div class="highlight"><pre><span></span><code><span class="n">Model</span>
+</code></pre></div>
+<p>A <code>Model</code> represents the learned behaviour for specific <a href="./#OutlierDetection.Detector"><code>Detector</code></a>. This might include parameters in parametric models or other repesentations of the learned data in nonparametric models. In essence, it includes everything required to transform an instance to an outlier score.</p>
+<p><a target='_blank' href='https://github.com/davnn/OutlierDetection.jl/blob/fd099014532a5e38aad2b9ffd087628131841aad/src/base.jl#LL37-L43' class='documenter-source'>source</a><br></p>
 <p><a id='Scores'></a></p>
 <p><a id='Scores-1'></a></p>
 <h3 id="scores">Scores</h3>
@@ -895,7 +972,16 @@
 <div class="highlight"><pre><span></span><code><span class="n">Scores</span><span class="o">::</span><span class="kt">AbstractVector</span><span class="p">{</span><span class="o">&lt;:</span><span class="kt">Real</span><span class="p">}</span>
 </code></pre></div>
 <p>Scores are continuous values, where the range depends on the specific detector yielding the scores. <em>Note:</em> All detectors return increasing scores and higher scores are associated with higher outlierness. Concretely, scores are defined as an <code>AbstractVector{&lt;:Real}</code>.</p>
-<p><a target='_blank' href='https://github.com/davnn/OutlierDetection.jl/blob/277057b3ce6ae4a8c39c557aed9b2edeb4643b99/src/base.jl#LL36-L42' class='documenter-source'>source</a><br></p>
+<p><a target='_blank' href='https://github.com/davnn/OutlierDetection.jl/blob/fd099014532a5e38aad2b9ffd087628131841aad/src/base.jl#LL46-L52' class='documenter-source'>source</a><br></p>
+<p><a id='Data'></a></p>
+<p><a id='Data-1'></a></p>
+<h3 id="data">Data</h3>
+<p><a id='OutlierDetection.Data' href='#OutlierDetection.Data'>#</a>
+<strong><code>OutlierDetection.Data</code></strong> &mdash; <em>Type</em>.</p>
+<div class="highlight"><pre><span></span><code><span class="n">Data</span><span class="o">::</span><span class="kt">AbstractArray</span><span class="p">{</span><span class="o">&lt;:</span><span class="kt">Real</span><span class="p">}</span>
+</code></pre></div>
+<p>The raw input data for every detector is defined as<code>AbstractArray{&lt;:Real}</code> and should be a one observation per column n-dimensional array. The input data used to <a href="./#OutlierDetection.fit"><code>fit</code></a> a <a href="./#OutlierDetection.Detector"><code>Detector</code></a> and <a href="./#OutlierDetection.score"><code>score</code></a> <a href="./#OutlierDetection.Data"><code>Data</code></a>.</p>
+<p><a target='_blank' href='https://github.com/davnn/OutlierDetection.jl/blob/fd099014532a5e38aad2b9ffd087628131841aad/src/base.jl#LL55-L60' class='documenter-source'>source</a><br></p>
 <p><a id='Labels'></a></p>
 <p><a id='Labels-1'></a></p>
 <h3 id="labels">Labels</h3>
@@ -904,83 +990,121 @@
 <div class="highlight"><pre><span></span><code><span class="n">Labels</span><span class="o">::</span><span class="kt">AbstractArray</span><span class="p">{</span><span class="o">&lt;:</span><span class="kt">Integer</span><span class="p">}</span>
 </code></pre></div>
 <p>Labels are used for supervision and evaluation and are defined as an <code>AbstractArray{&lt;:Integer}</code>. The convention for labels is that <code>-1</code> indicates outliers, <code>1</code> indicates inliers and <code>0</code> indicates unlabeled data in semi-supervised tasks.</p>
-<p><a target='_blank' href='https://github.com/davnn/OutlierDetection.jl/blob/277057b3ce6ae4a8c39c557aed9b2edeb4643b99/src/base.jl#LL53-L58' class='documenter-source'>source</a><br></p>
-<p><a id='Data'></a></p>
-<p><a id='Data-1'></a></p>
-<h3 id="data">Data</h3>
-<p><a id='OutlierDetection.Data' href='#OutlierDetection.Data'>#</a>
-<strong><code>OutlierDetection.Data</code></strong> &mdash; <em>Type</em>.</p>
-<div class="highlight"><pre><span></span><code><span class="n">Data</span><span class="o">::</span><span class="kt">AbstractArray</span><span class="p">{</span><span class="o">&lt;:</span><span class="kt">Real</span><span class="p">}</span>
+<p><a target='_blank' href='https://github.com/davnn/OutlierDetection.jl/blob/fd099014532a5e38aad2b9ffd087628131841aad/src/base.jl#LL63-L68' class='documenter-source'>source</a><br></p>
+<p><a id='Fit'></a></p>
+<p><a id='Fit-1'></a></p>
+<h3 id="fit">Fit</h3>
+<p><a id='OutlierDetection.Fit' href='#OutlierDetection.Fit'>#</a>
+<strong><code>OutlierDetection.Fit</code></strong> &mdash; <em>Type</em>.</p>
+<div class="highlight"><pre><span></span><code><span class="n">Fit</span>
 </code></pre></div>
-<p>The raw input data for every detector is defined as<code>AbstractArray{&lt;:Real}</code> and should be a column-major n-dimensional array. The input data used to <a href="./#OutlierDetection.fit"><code>fit</code></a> a <a href="./#OutlierDetection.Detector"><code>Detector</code></a> and <a href="./#OutlierDetection.transform"><code>transform</code></a> <a href="./#OutlierDetection.Data"><code>Data</code></a>.</p>
-<p><a target='_blank' href='https://github.com/davnn/OutlierDetection.jl/blob/277057b3ce6ae4a8c39c557aed9b2edeb4643b99/src/base.jl#LL45-L50' class='documenter-source'>source</a><br></p>
+<p>A <code>Fit</code> bundles a <a href="./#OutlierDetection.Model"><code>Model</code></a> and <a href="./#OutlierDetection.Scores"><code>Scores</code></a> achieved when fitting a <a href="./#OutlierDetection.Detector"><code>Detector</code></a>. The model is used directly in later <a href="./#OutlierDetection.score"><code>score</code></a> calls and the (train-) scores are forwarded in <a href="./#OutlierDetection.score"><code>score</code></a>.</p>
+<p><a target='_blank' href='https://github.com/davnn/OutlierDetection.jl/blob/fd099014532a5e38aad2b9ffd087628131841aad/src/base.jl#LL71-L76' class='documenter-source'>source</a><br></p>
+<p><a id='Result'></a></p>
+<p><a id='Result-1'></a></p>
+<h3 id="result">Result</h3>
+<p><a id='OutlierDetection.Result' href='#OutlierDetection.Result'>#</a>
+<strong><code>OutlierDetection.Result</code></strong> &mdash; <em>Type</em>.</p>
+<div class="highlight"><pre><span></span><code><span class="n">Result</span><span class="o">::</span><span class="kt">Tuple</span><span class="p">{</span><span class="n">Scores</span><span class="p">,</span> <span class="n">Scores</span><span class="p">}</span>
+</code></pre></div>
+<p>Describes the result of using <a href="./#OutlierDetection.score"><code>score</code></a> with a <a href="./#OutlierDetection.Detector"><code>Detector</code></a> and is a tuple containing the train scores achieved with <a href="./#OutlierDetection.fit"><code>fit</code></a> and the test scores achieved with <a href="./#OutlierDetection.score"><code>score</code></a>. We return both train and test scores because this gives us the greatest flexibility in later score combination or classification.</p>
+<p><a target='_blank' href='https://github.com/davnn/OutlierDetection.jl/blob/fd099014532a5e38aad2b9ffd087628131841aad/src/base.jl#LL82-L88' class='documenter-source'>source</a><br></p>
 <p><a id='Functions'></a></p>
 <p><a id='Functions-1'></a></p>
 <h2 id="functions">Functions</h2>
 <p><a id='fit'></a></p>
 <p><a id='fit-1'></a></p>
-<h3 id="fit">fit</h3>
+<h3 id="fit_1">fit</h3>
 <p><a id='OutlierDetection.fit' href='#OutlierDetection.fit'>#</a>
 <strong><code>OutlierDetection.fit</code></strong> &mdash; <em>Function</em>.</p>
 <div class="highlight"><pre><span></span><code><span class="n">fit</span><span class="p">(</span><span class="n">detector</span><span class="p">,</span>
     <span class="n">X</span><span class="p">,</span>
     <span class="n">y</span><span class="p">)</span>
 </code></pre></div>
-<p>Fit a specified unsupervised, supervised or semi-supervised outlier detector. That is, learn a <code>DetectorModel</code> from input data <code>X</code> and, in the supervised and semi-supervised setting, labels <code>y</code>. In a supervised setting, the label <code>-1</code> represents outliers and <code>1</code> inliers. In a semi-supervised setting, the label <code>0</code> additionally represents unlabeled data. <em>Note:</em> Unsupervised detectors can be fitted without specifying <code>y</code>, otherwise <code>y</code> is simply ignore.</p>
+<p>Fit a specified unsupervised, supervised or semi-supervised outlier detector. That is, learn a <code>Model</code> from input data <code>X</code> and, in the supervised and semi-supervised setting, labels <code>y</code>. In a supervised setting, the label <code>-1</code> represents outliers and <code>1</code> inliers. In a semi-supervised setting, the label <code>0</code> additionally represents unlabeled data. <em>Note:</em> Unsupervised detectors can be fitted without specifying <code>y</code>, otherwise <code>y</code> is simply ignore.</p>
 <p><strong>Parameters</strong></p>
 <div class="highlight"><pre><span></span><code>detector::Detector
 </code></pre></div>
 <p>Any <a href="./#OutlierDetection.UnsupervisedDetector"><code>UnsupervisedDetector</code></a> or <a href="./#OutlierDetection.SupervisedDetector"><code>SupervisedDetector</code></a> implementation.</p>
 <div class="highlight"><pre><span></span><code>X::Union{AbstractMatrix, Tables.jl-compatible}
 </code></pre></div>
-<p>Either a column-major matrix or a row-major <a href="https://github.com/JuliaData/Tables.jl">Tables.jl-compatible</a> source.</p>
+<p>Either a matrix or a <a href="https://github.com/JuliaData/Tables.jl">Tables.jl-compatible</a> data source, with one observation per row and a number of feature columns.</p>
 <p><strong>Returns</strong></p>
-<div class="highlight"><pre><span></span><code>model::DetectorModel
+<div class="highlight"><pre><span></span><code>fit::Fit
 </code></pre></div>
-<p>The learned model of the given detector, which contains all the necessary information for later prediction.</p>
-<div class="highlight"><pre><span></span><code>scores::Scores
-</code></pre></div>
-<p>The achieved outlier scores of the given training data <code>X</code>.</p>
+<p>The learned model of the given detector, which contains all the necessary information for later prediction and the achieved outlier scores of the given input data <code>X</code>.</p>
 <p><strong>Examples</strong></p>
-<div class="highlight"><pre><span></span><code><span class="k">using</span> <span class="n">OutlierDetection</span><span class="o">:</span> <span class="n">KNN</span><span class="p">,</span> <span class="n">fit</span><span class="p">,</span> <span class="n">transform</span>
+<div class="highlight"><pre><span></span><code><span class="k">using</span> <span class="n">OutlierDetection</span><span class="o">:</span> <span class="n">KNN</span><span class="p">,</span> <span class="n">fit</span><span class="p">,</span> <span class="n">score</span>
 <span class="n">detector</span> <span class="o">=</span> <span class="n">KNN</span><span class="p">()</span>
 <span class="n">X</span> <span class="o">=</span> <span class="n">rand</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span>
-<span class="n">model</span><span class="p">,</span> <span class="n">scores</span> <span class="o">=</span> <span class="n">fit</span><span class="p">(</span><span class="n">detector</span><span class="p">,</span> <span class="n">X</span><span class="p">)</span>
-<span class="n">transform</span><span class="p">(</span><span class="n">detector</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <span class="n">X</span><span class="p">)</span>
+<span class="n">model</span> <span class="o">=</span> <span class="n">fit</span><span class="p">(</span><span class="n">detector</span><span class="p">,</span> <span class="n">X</span><span class="p">)</span>
+<span class="n">train_scores</span><span class="p">,</span> <span class="n">test_scores</span> <span class="o">=</span> <span class="n">score</span><span class="p">(</span><span class="n">detector</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <span class="n">X</span><span class="p">)</span>
 </code></pre></div>
-<p><a target='_blank' href='https://github.com/davnn/OutlierDetection.jl/blob/277057b3ce6ae4a8c39c557aed9b2edeb4643b99/src/base.jl#LL89-L116' class='documenter-source'>source</a><br></p>
-<p><a id='transform'></a></p>
-<p><a id='transform-1'></a></p>
-<h3 id="transform">transform</h3>
-<p><a id='OutlierDetection.transform' href='#OutlierDetection.transform'>#</a>
-<strong><code>OutlierDetection.transform</code></strong> &mdash; <em>Function</em>.</p>
-<div class="highlight"><pre><span></span><code><span class="n">transform</span><span class="p">(</span><span class="n">detector</span><span class="p">,</span>
-          <span class="n">model</span><span class="p">,</span>
-          <span class="n">X</span><span class="p">)</span>
+<p><a target='_blank' href='https://github.com/davnn/OutlierDetection.jl/blob/fd099014532a5e38aad2b9ffd087628131841aad/src/base.jl#LL133-L158' class='documenter-source'>source</a><br></p>
+<p><a id='score'></a></p>
+<p><a id='score-1'></a></p>
+<h3 id="score">score</h3>
+<p><a id='OutlierDetection.score' href='#OutlierDetection.score'>#</a>
+<strong><code>OutlierDetection.score</code></strong> &mdash; <em>Function</em>.</p>
+<div class="highlight"><pre><span></span><code><span class="n">score</span><span class="p">(</span><span class="n">detector</span><span class="p">,</span>
+      <span class="n">model</span><span class="p">,</span>
+      <span class="n">X</span><span class="p">)</span>
 </code></pre></div>
-<p>Transform input data <code>X</code> to outlier scores using an <a href="./#OutlierDetection.UnsupervisedDetector"><code>UnsupervisedDetector</code></a> or <a href="./#OutlierDetection.SupervisedDetector"><code>SupervisedDetector</code></a> and a corresponding <a href="./#OutlierDetection.DetectorModel"><code>DetectorModel</code></a>.</p>
+<p>Transform input data <code>X</code> to outlier scores using an <a href="./#OutlierDetection.UnsupervisedDetector"><code>UnsupervisedDetector</code></a> or <a href="./#OutlierDetection.SupervisedDetector"><code>SupervisedDetector</code></a> and a corresponding <a href="./#OutlierDetection.Model"><code>Model</code></a>.</p>
 <p><strong>Parameters</strong></p>
 <div class="highlight"><pre><span></span><code>detector::Detector
 </code></pre></div>
 <p>Any <a href="./#OutlierDetection.UnsupervisedDetector"><code>UnsupervisedDetector</code></a> or <a href="./#OutlierDetection.SupervisedDetector"><code>SupervisedDetector</code></a> implementation.</p>
-<div class="highlight"><pre><span></span><code>model::DetectorModel
+<div class="highlight"><pre><span></span><code>model::Model
 </code></pre></div>
 <p>The model learned from using <a href="./#OutlierDetection.fit"><code>fit</code></a> with a supervised or unsupervised <a href="./#OutlierDetection.Detector"><code>Detector</code></a></p>
 <div class="highlight"><pre><span></span><code>X::Union{AbstractMatrix, Tables.jl-compatible}
 </code></pre></div>
-<p>Either a column-major matrix or a row-major <a href="https://github.com/JuliaData/Tables.jl">Tables.jl-compatible</a> source.</p>
+<p>Either a matrix or a <a href="https://github.com/JuliaData/Tables.jl">Tables.jl-compatible</a> data source, with one observation per row and a number of feature columns.</p>
 <p><strong>Returns</strong></p>
-<div class="highlight"><pre><span></span><code>scores::Scores
+<div class="highlight"><pre><span></span><code>result::Result
 </code></pre></div>
-<p>The achieved outlier scores of the given test data <code>X</code>.</p>
+<p>Tuple of the achieved outlier scores of the given train and test data.</p>
 <p><strong>Examples</strong></p>
-<div class="highlight"><pre><span></span><code><span class="k">using</span> <span class="n">OutlierDetection</span><span class="o">:</span> <span class="n">KNN</span><span class="p">,</span> <span class="n">fit</span><span class="p">,</span> <span class="n">transform</span>
+<div class="highlight"><pre><span></span><code><span class="k">using</span> <span class="n">OutlierDetection</span><span class="o">:</span> <span class="n">KNN</span><span class="p">,</span> <span class="n">fit</span><span class="p">,</span> <span class="n">score</span>
 <span class="n">detector</span> <span class="o">=</span> <span class="n">KNN</span><span class="p">()</span>
 <span class="n">X</span> <span class="o">=</span> <span class="n">rand</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span>
-<span class="n">model</span><span class="p">,</span> <span class="n">scores</span> <span class="o">=</span> <span class="n">fit</span><span class="p">(</span><span class="n">detector</span><span class="p">,</span> <span class="n">X</span><span class="p">)</span>
-<span class="n">transform</span><span class="p">(</span><span class="n">detector</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <span class="n">X</span><span class="p">)</span>
+<span class="n">model</span> <span class="o">=</span> <span class="n">fit</span><span class="p">(</span><span class="n">detector</span><span class="p">,</span> <span class="n">X</span><span class="p">)</span>
+<span class="n">train_scores</span><span class="p">,</span> <span class="n">test_scores</span> <span class="o">=</span> <span class="n">score</span><span class="p">(</span><span class="n">detector</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <span class="n">X</span><span class="p">)</span>
 </code></pre></div>
-<p><a target='_blank' href='https://github.com/davnn/OutlierDetection.jl/blob/277057b3ce6ae4a8c39c557aed9b2edeb4643b99/src/base.jl#LL122-L147' class='documenter-source'>source</a><br></p>
+<p><a target='_blank' href='https://github.com/davnn/OutlierDetection.jl/blob/fd099014532a5e38aad2b9ffd087628131841aad/src/base.jl#LL162-L187' class='documenter-source'>source</a><br></p>
+<p><a id='detect'></a></p>
+<p><a id='detect-1'></a></p>
+<h3 id="detect">detect</h3>
+<p><a id='OutlierDetection.detect' href='#OutlierDetection.detect'>#</a>
+<strong><code>OutlierDetection.detect</code></strong> &mdash; <em>Function</em>.</p>
+<div class="highlight"><pre><span></span><code><span class="n">detect</span><span class="p">(</span><span class="n">classifier</span><span class="p">,</span>
+       <span class="n">result</span><span class="o">...</span><span class="p">)</span>
+</code></pre></div>
+<p>Convert a number of scores into inlier (<code>1</code>) / outlier (<code>-1</code>) classes, typically by using on a outlier-threshold on the achieved scores.</p>
+<p><strong>Parameters</strong></p>
+<div class="highlight"><pre><span></span><code>classifier::Classifier
+</code></pre></div>
+<p>A <a href="./#OutlierDetection.Classifier"><code>Classifier</code></a> that implements the <a href="./#OutlierDetection.detect"><code>detect</code></a> method.</p>
+<div class="highlight"><pre><span></span><code>result::Result...
+</code></pre></div>
+<p>One or more <a href="./#OutlierDetection.score"><code>score</code></a> results (tuples) or alternatively a single vector of scores or two vectors, where the first vector represents train scores and the second vector test scores.</p>
+<p><strong>Returns</strong></p>
+<div class="highlight"><pre><span></span><code>result::Labels
+</code></pre></div>
+<p>A vector containing the binary inlier and outlier labels.</p>
+<p><strong>Examples</strong></p>
+<div class="highlight"><pre><span></span><code><span class="k">using</span> <span class="n">OutlierDetection</span><span class="o">:</span> <span class="n">Binarize</span><span class="p">,</span> <span class="n">KNN</span><span class="p">,</span> <span class="n">fit</span><span class="p">,</span> <span class="n">score</span>
+<span class="n">detector</span> <span class="o">=</span> <span class="n">KNN</span><span class="p">()</span>
+<span class="n">X</span> <span class="o">=</span> <span class="n">rand</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span>
+<span class="n">model</span> <span class="o">=</span> <span class="n">fit</span><span class="p">(</span><span class="n">detector</span><span class="p">,</span> <span class="n">X</span><span class="p">)</span>
+<span class="n">train_scores</span><span class="p">,</span> <span class="n">test_scores</span> <span class="o">=</span> <span class="n">score</span><span class="p">(</span><span class="n">detector</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <span class="n">X</span><span class="p">)</span>
+<span class="n">clf</span> <span class="o">=</span> <span class="n">Binarize</span><span class="p">()</span>
+<span class="n">ŷ</span> <span class="o">=</span> <span class="n">detect</span><span class="p">(</span><span class="n">clf</span><span class="p">,</span> <span class="n">train_scores</span><span class="p">,</span> <span class="n">test_scores</span><span class="p">)</span>
+<span class="c"># or, if using multiple detectors</span>
+<span class="c"># ŷ = detect(clf, (train1, test1), (train2, test2), ...)</span>
+</code></pre></div>
+<p><a target='_blank' href='https://github.com/davnn/OutlierDetection.jl/blob/fd099014532a5e38aad2b9ffd087628131841aad/src/base.jl#LL190-L214' class='documenter-source'>source</a><br></p>
                 
               
               
@@ -1014,13 +1138,13 @@
         </a>
       
       
-        <a href="../models/" class="md-footer__link md-footer__link--next" rel="next">
+        <a href="../classifiers/" class="md-footer__link md-footer__link--next" rel="next">
           <div class="md-footer__title">
             <div class="md-ellipsis">
               <span class="md-footer__direction">
                 Next
               </span>
-              Models
+              Classifiers
             </div>
           </div>
           <div class="md-footer__button md-icon">

@@ -606,8 +606,20 @@
   
   
     <li class="md-nav__item">
-      <a href="../../API/models/" class="md-nav__link">
-        Models
+      <a href="../../API/classifiers/" class="md-nav__link">
+        Classifiers
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../API/detectors/" class="md-nav__link">
+        Detectors
       </a>
     </li>
   
@@ -685,7 +697,7 @@
 <h1 id="example">Example</h1>
 <p>This example demonstrates using the <em>raw</em> <code>OutlierDetection</code> API to determine the outlierness of instances in the <em>Thyroid Disease Dataset</em>, which is part of the <a href="http://odds.cs.stonybrook.edu/">ODDS collection</a>. We use <a href="https://github.com/davnn/OutlierDetectionData.jl"><code>OutlierDetectionData.jl</code></a> to download and read the dataset.</p>
 <p>Import <code>OutlierDetection</code> and <code>OutlierDetectionData</code></p>
-<div class="highlight"><pre><span></span><code><span class="k">using</span> <span class="n">OutlierDetection</span><span class="o">:</span> <span class="n">KNN</span><span class="p">,</span> <span class="n">fit</span><span class="p">,</span> <span class="n">transform</span><span class="p">,</span> <span class="n">roc_auc</span>
+<div class="highlight"><pre><span></span><code><span class="k">using</span> <span class="n">OutlierDetection</span><span class="o">:</span> <span class="n">KNN</span><span class="p">,</span> <span class="n">fit</span><span class="p">,</span> <span class="n">score</span><span class="p">,</span> <span class="n">roc_auc</span>
 <span class="k">using</span> <span class="n">OutlierDetectionData</span><span class="o">:</span> <span class="n">ODDS</span>
 </code></pre></div>
 <p>Download and read the <code>"thyroid"</code> dataset from the <code>ODDS</code> collection.</p>
@@ -701,21 +713,22 @@
 <div class="highlight"><pre><span></span><code><span class="n">detector</span> <span class="o">=</span> <span class="n">KNN</span><span class="p">(</span><span class="n">k</span><span class="o">=</span><span class="mi">10</span><span class="p">);</span>
 </code></pre></div>
 <p>Learn a model from the data <code>X</code>.</p>
-<div class="highlight"><pre><span></span><code><span class="n">model</span><span class="p">,</span> <span class="n">scores_train</span> <span class="o">=</span> <span class="n">fit</span><span class="p">(</span><span class="n">detector</span><span class="p">,</span> <span class="n">X_train</span><span class="p">);</span>
+<div class="highlight"><pre><span></span><code><span class="n">model</span> <span class="o">=</span> <span class="n">fit</span><span class="p">(</span><span class="n">detector</span><span class="p">,</span> <span class="n">X_train</span><span class="p">);</span>
 </code></pre></div>
 <p>Evaluate our resulting scores on the training data.</p>
-<div class="highlight"><pre><span></span><code><span class="n">roc_auc</span><span class="p">(</span><span class="n">y_train</span><span class="p">,</span> <span class="n">scores_train</span><span class="p">)</span>
+<div class="highlight"><pre><span></span><code><span class="n">roc_auc</span><span class="p">(</span><span class="n">y_train</span><span class="p">,</span> <span class="n">model</span><span class="o">.</span><span class="n">scores</span><span class="p">)</span>
 </code></pre></div>
 <div class="highlight"><pre><span></span><code>julia&gt; 0.945...
 </code></pre></div>
 <p>Calculate the outlier scores for our test data.</p>
-<div class="highlight"><pre><span></span><code><span class="n">scores_test</span> <span class="o">=</span> <span class="n">transform</span><span class="p">(</span><span class="n">detector</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <span class="n">X_test</span><span class="p">);</span>
+<div class="highlight"><pre><span></span><code><span class="n">scores_train</span><span class="p">,</span> <span class="n">scores_test</span> <span class="o">=</span> <span class="n">score</span><span class="p">(</span><span class="n">detector</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <span class="n">X_test</span><span class="p">);</span>
 </code></pre></div>
 <p>Evaluate the result on the test data.</p>
 <div class="highlight"><pre><span></span><code><span class="n">roc_auc</span><span class="p">(</span><span class="n">y_test</span><span class="p">,</span> <span class="n">scores_test</span><span class="p">)</span>
 </code></pre></div>
 <div class="highlight"><pre><span></span><code>julia&gt; 0.967...
 </code></pre></div>
+<p>We always return both the train and test scores because later used <a href="../../API/base/#OutlierDetection.Classifier">classifiers</a> typically choose a threshold based on the train scores when converting the scores to inlier/outlier labels.</p>
 <p><a id='Notice'></a></p>
 <p><a id='Notice-1'></a></p>
 <h2 id="notice">Notice</h2>
