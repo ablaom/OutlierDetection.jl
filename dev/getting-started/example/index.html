@@ -361,8 +361,15 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#notice" class="md-nav__link">
-    Notice
+  <a href="#using-mlj" class="md-nav__link">
+    Using MLJ
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#learn-more" class="md-nav__link">
+    Learn more
   </a>
   
 </li>
@@ -630,6 +637,18 @@
   
   
     <li class="md-nav__item">
+      <a href="../../API/pydetectors/" class="md-nav__link">
+        PyDetectors
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../API/evaluation/" class="md-nav__link">
         Evaluation
       </a>
@@ -669,8 +688,15 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#notice" class="md-nav__link">
-    Notice
+  <a href="#using-mlj" class="md-nav__link">
+    Using MLJ
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#learn-more" class="md-nav__link">
+    Learn more
   </a>
   
 </li>
@@ -695,44 +721,60 @@
                 <p><a id='Example'></a></p>
 <p><a id='Example-1'></a></p>
 <h1 id="example">Example</h1>
-<p>This example demonstrates using the <em>raw</em> <code>OutlierDetection</code> API to determine the outlierness of instances in the <em>Thyroid Disease Dataset</em>, which is part of the <a href="http://odds.cs.stonybrook.edu/">ODDS collection</a>. We use <a href="https://github.com/davnn/OutlierDetectionData.jl"><code>OutlierDetectionData.jl</code></a> to download and read the dataset.</p>
+<p>This example demonstrates using the <em>raw</em> <code>OutlierDetection</code> API to determine the outlierness of instances in the <em>Thyroid Disease Dataset</em>, which is part of the <a href="http://odds.cs.stonybrook.edu/">ODDS collection</a>. We use <a href="https://github.com/davnn/OutlierDetectionData.jl"><code>OutlierDetectionData.jl</code></a> to download and read the dataset. Note that the raw API uses the <em>columns-as-observations</em> convention for improved performance.</p>
 <p>Import <code>OutlierDetection</code> and <code>OutlierDetectionData</code></p>
-<div class="highlight"><pre><span></span><code><span class="k">using</span> <span class="n">OutlierDetection</span><span class="o">:</span> <span class="n">KNN</span><span class="p">,</span> <span class="n">fit</span><span class="p">,</span> <span class="n">score</span><span class="p">,</span> <span class="n">roc_auc</span>
+<div class="highlight"><pre><span></span><code><span class="k">using</span> <span class="n">OutlierDetection</span>
 <span class="k">using</span> <span class="n">OutlierDetectionData</span><span class="o">:</span> <span class="n">ODDS</span>
 </code></pre></div>
 <p>Download and read the <code>"thyroid"</code> dataset from the <code>ODDS</code> collection.</p>
-<div class="highlight"><pre><span></span><code><span class="n">X</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">ODDS</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="s">&quot;thyroid&quot;</span><span class="p">);</span>
-
-<span class="c"># simply use the first 70% of the data for training</span>
-<span class="n">n_train</span> <span class="o">=</span> <span class="n">convert</span><span class="p">(</span><span class="kt">Int</span><span class="p">,</span> <span class="n">floor</span><span class="p">(</span><span class="n">length</span><span class="p">(</span><span class="n">y</span><span class="p">)</span> <span class="o">*</span> <span class="mf">0.7</span><span class="p">));</span>
-
-<span class="c"># split into train and test</span>
-<span class="n">X_train</span><span class="p">,</span> <span class="n">X_test</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">y_test</span> <span class="o">=</span> <span class="n">X</span><span class="p">[</span><span class="o">:</span><span class="p">,</span> <span class="k">begin</span><span class="o">:</span><span class="n">n_train</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">X</span><span class="p">[</span><span class="o">:</span><span class="p">,</span> <span class="n">n_train</span><span class="o">:</span><span class="k">end</span><span class="p">],</span> <span class="n">y</span><span class="p">[</span><span class="k">begin</span><span class="o">:</span><span class="n">n_train</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">y</span><span class="p">[</span><span class="n">n_train</span><span class="o">:</span><span class="k">end</span><span class="p">];</span>
+<div class="highlight"><pre><span></span><code><span class="n">X</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">ODDS</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="s">&quot;thyroid&quot;</span><span class="p">)</span>
 </code></pre></div>
-<p>Initialize an unsupervised <code>KNN</code> detector with <code>k=10</code> neighbors.</p>
-<div class="highlight"><pre><span></span><code><span class="n">detector</span> <span class="o">=</span> <span class="n">KNN</span><span class="p">(</span><span class="n">k</span><span class="o">=</span><span class="mi">10</span><span class="p">);</span>
+<p>Create indices to split the data into 50% training and test data.</p>
+<div class="highlight"><pre><span></span><code>n_train = Int(length(y) * 0.5)
+train, test = eachindex(y)[1:n_train], eachindex(y)[n_train+1:end]
+</code></pre></div>
+<p>Initialize an unsupervised <a href="../../API/detectors/#OutlierDetection.KNN"><code>KNN</code></a> <a href="../../API/base/#OutlierDetection.Detector"><code>Detector</code></a> with <code>k=10</code> neighbors.</p>
+<div class="highlight"><pre><span></span><code><span class="n">detector</span> <span class="o">=</span> <span class="n">KNN</span><span class="p">(</span><span class="n">k</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
 </code></pre></div>
 <p>Learn a model from the data <code>X</code>.</p>
-<div class="highlight"><pre><span></span><code><span class="n">model</span> <span class="o">=</span> <span class="n">fit</span><span class="p">(</span><span class="n">detector</span><span class="p">,</span> <span class="n">X_train</span><span class="p">);</span>
+<div class="highlight"><pre><span></span><code><span class="n">fitresult</span> <span class="o">=</span> <span class="n">fit</span><span class="p">(</span><span class="n">detector</span><span class="p">,</span> <span class="n">X</span><span class="p">[</span><span class="n">train</span><span class="p">,</span> <span class="o">:</span><span class="p">]</span><span class="o">&#39;</span><span class="p">)</span>
 </code></pre></div>
-<p>Evaluate our resulting scores on the training data.</p>
-<div class="highlight"><pre><span></span><code><span class="n">roc_auc</span><span class="p">(</span><span class="n">y_train</span><span class="p">,</span> <span class="n">model</span><span class="o">.</span><span class="n">scores</span><span class="p">)</span>
+<p>Evaluate the resulting training data scores (stored in the fit result).</p>
+<div class="highlight"><pre><span></span><code><span class="n">roc_auc</span><span class="p">(</span><span class="n">y</span><span class="p">[</span><span class="n">train</span><span class="p">],</span> <span class="n">fitresult</span><span class="o">.</span><span class="n">scores</span><span class="p">)</span>
 </code></pre></div>
-<div class="highlight"><pre><span></span><code>julia&gt; 0.945...
+<p>Calculate the outlier scores for our test data. Note that we always return both the train and test scores because later used <a href="../../API/base/#OutlierDetection.Classifier">classifiers</a> typically choose a threshold based on the train scores.</p>
+<div class="highlight"><pre><span></span><code><span class="n">scores_train</span><span class="p">,</span> <span class="n">scores_test</span> <span class="o">=</span> <span class="n">score</span><span class="p">(</span><span class="n">detector</span><span class="p">,</span> <span class="n">fitresult</span><span class="p">,</span> <span class="n">X</span><span class="p">[</span><span class="n">test</span><span class="p">,</span> <span class="o">:</span><span class="p">]</span><span class="o">&#39;</span><span class="p">)</span>
 </code></pre></div>
-<p>Calculate the outlier scores for our test data.</p>
-<div class="highlight"><pre><span></span><code><span class="n">scores_train</span><span class="p">,</span> <span class="n">scores_test</span> <span class="o">=</span> <span class="n">score</span><span class="p">(</span><span class="n">detector</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <span class="n">X_test</span><span class="p">);</span>
+<p>Evaluate the resulting test scores with the given labels.</p>
+<div class="highlight"><pre><span></span><code><span class="n">roc_auc</span><span class="p">(</span><span class="n">y</span><span class="p">[</span><span class="n">test</span><span class="p">],</span> <span class="n">scores_test</span><span class="p">)</span>
 </code></pre></div>
-<p>Evaluate the result on the test data.</p>
-<div class="highlight"><pre><span></span><code><span class="n">roc_auc</span><span class="p">(</span><span class="n">y_test</span><span class="p">,</span> <span class="n">scores_test</span><span class="p">)</span>
+<p>You can easily convert the obtained scores into inlier (<code>1</code>), and outlier (<code>-1</code>) labels using a <a href="../../API/base/#OutlierDetection.Classifier"><code>Classifier</code></a>, in this case, <a href="../../API/classifiers/#OutlierDetection.Binarize"><code>Binarize</code></a>.</p>
+<div class="highlight"><pre><span></span><code><span class="n">clf</span> <span class="o">=</span> <span class="n">Binarize</span><span class="p">()</span>
+<span class="n">detect</span><span class="p">(</span><span class="n">clf</span><span class="p">,</span> <span class="n">scores_train</span><span class="p">,</span> <span class="n">scores_test</span><span class="p">)</span>
 </code></pre></div>
-<div class="highlight"><pre><span></span><code>julia&gt; 0.967...
+<p><a id='Using-MLJ'></a></p>
+<p><a id='Using-MLJ-1'></a></p>
+<h2 id="using-mlj">Using MLJ</h2>
+<p>Typically, you do not use the <em>raw</em> <code>OutlierDetection</code> API, but instead use <a href="https://github.com/alan-turing-institute/MLJ.jl">MLJ</a> to interface with <code>OutlierDetection.jl</code>. The main difference between the raw API and MLJ is, besides method naming differences, the introduction of a <a href="https://alan-turing-institute.github.io/MLJ.jl/dev/machines/"><code>machine</code></a>. In the raw API, we explicitly pass the results of fitting a detector (models) to further <code>score</code> calls. Machines allow us to hide that complexity by binding data directly to detectors and automatically passing fit results to further <code>transform</code> (unsupervised) or <code>predict</code> (supervised) calls. Under the hood, <code>transform</code> and <code>predict</code> pass the input data and previous fit result to <code>score</code>.</p>
+<p>Given that you have already imported <code>OutlierDetection</code> and loaded <code>X</code> and <code>y</code> as described before, import <code>MLJ</code>.</p>
+<div class="highlight"><pre><span></span><code><span class="k">using</span> <span class="n">MLJ</span> <span class="c"># or MLJBase</span>
 </code></pre></div>
-<p>We always return both the train and test scores because later used <a href="../../API/base/#OutlierDetection.Classifier">classifiers</a> typically choose a threshold based on the train scores when converting the scores to inlier/outlier labels.</p>
-<p><a id='Notice'></a></p>
-<p><a id='Notice-1'></a></p>
-<h2 id="notice">Notice</h2>
-<p>Typically, you do not use the <em>raw</em> <code>OutlierDetection</code> API directly, but instead use <a href="https://github.com/alan-turing-institute/MLJ.jl">MLJ</a> to interface with <code>OutlierDetection.jl</code>. This way you can easily integrate and extend Julia's machine learning ecosystem with outlier detection algorithms. To learn more about the usage of MLJ, check out the <a href="../../documentation/guide/">guide</a>!</p>
+<p>Create a pipeline consisting of a detector and classifier.</p>
+<div class="highlight"><pre><span></span><code><span class="n">pipe</span> <span class="o">=</span> <span class="nd">@pipeline</span> <span class="n">KNN</span><span class="p">(</span><span class="n">k</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span> <span class="n">Binarize</span><span class="p">()</span>
+</code></pre></div>
+<p>Bind the pipeline to data to create a machine.</p>
+<div class="highlight"><pre><span></span><code><span class="n">mach</span> <span class="o">=</span> <span class="n">machine</span><span class="p">(</span><span class="n">pipe</span><span class="p">,</span> <span class="n">X</span><span class="p">)</span>
+</code></pre></div>
+<p>Fit the machine to learn from the training input data.</p>
+<div class="highlight"><pre><span></span><code><span class="n">fit!</span><span class="p">(</span><span class="n">mach</span><span class="p">,</span> <span class="n">rows</span><span class="o">=</span><span class="n">train</span><span class="p">)</span>
+</code></pre></div>
+<p>Predict the labels for the test data with the learned machine.</p>
+<div class="highlight"><pre><span></span><code><span class="n">transform</span><span class="p">(</span><span class="n">mach</span><span class="p">,</span> <span class="n">rows</span><span class="o">=</span><span class="n">test</span><span class="p">)</span>
+</code></pre></div>
+<p><a id='Learn-more'></a></p>
+<p><a id='Learn-more-1'></a></p>
+<h2 id="learn-more">Learn more</h2>
+<p>To learn more about the concepts in <code>OutlierDetection.jl</code>, check out the <a href="../../documentation/guide/">guide</a>!</p>
                 
               
               

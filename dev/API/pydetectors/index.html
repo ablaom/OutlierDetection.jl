@@ -1,0 +1,1222 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Fast, scalable and flexible outlier detection with Julia.">
+      
+      
+      
+        <meta name="author" content="David Muhr <muhrdavid@gmail.com> and contributors">
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.1.2, mkdocs-material-7.1.2">
+    
+    
+      
+        <title>PyDetectors - OutlierDetection.jl</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.6f955dcd.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.ef6f36e2.min.css">
+        
+          
+          
+          <meta name="theme-color" content="#4051b5">
+        
+      
+    
+    
+    
+      
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,400i,700%7CRoboto+Mono&display=fallback">
+        <style>:root{--md-text-font-family:"Roboto";--md-code-font-family:"Roboto Mono"}</style>
+      
+    
+    
+    
+      <link rel="stylesheet" href="../../styles/custom.css">
+    
+    
+      
+    
+    
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <script>function __prefix(e){return new URL("../..",location).pathname+"."+e}function __get(e,t=localStorage){return JSON.parse(t.getItem(__prefix(e)))}</script>
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#python-detectors" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+      <header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="OutlierDetection.jl" class="md-header__button md-logo" aria-label="OutlierDetection.jl" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M14 8.5a1.5 1.5 0 0 0-1.5 1.5 1.5 1.5 0 0 0 1.5 1.5 1.5 1.5 0 0 0 1.5-1.5A1.5 1.5 0 0 0 14 8.5m0 4a1.5 1.5 0 0 0-1.5 1.5 1.5 1.5 0 0 0 1.5 1.5 1.5 1.5 0 0 0 1.5-1.5 1.5 1.5 0 0 0-1.5-1.5M10 17a1 1 0 0 0-1 1 1 1 0 0 0 1 1 1 1 0 0 0 1-1 1 1 0 0 0-1-1m0-8.5A1.5 1.5 0 0 0 8.5 10a1.5 1.5 0 0 0 1.5 1.5 1.5 1.5 0 0 0 1.5-1.5A1.5 1.5 0 0 0 10 8.5m4 12a.5.5 0 0 0-.5.5.5.5 0 0 0 .5.5.5.5 0 0 0 .5-.5.5.5 0 0 0-.5-.5m0-3.5a1 1 0 0 0-1 1 1 1 0 0 0 1 1 1 1 0 0 0 1-1 1 1 0 0 0-1-1m7-3.5a.5.5 0 0 0-.5.5.5.5 0 0 0 .5.5.5.5 0 0 0 .5-.5.5.5 0 0 0-.5-.5M18 5a1 1 0 0 0-1 1 1 1 0 0 0 1 1 1 1 0 0 0 1-1 1 1 0 0 0-1-1m0 4a1 1 0 0 0-1 1 1 1 0 0 0 1 1 1 1 0 0 0 1-1 1 1 0 0 0-1-1m0 8a1 1 0 0 0-1 1 1 1 0 0 0 1 1 1 1 0 0 0 1-1 1 1 0 0 0-1-1m0-4a1 1 0 0 0-1 1 1 1 0 0 0 1 1 1 1 0 0 0 1-1 1 1 0 0 0-1-1m-8-.5A1.5 1.5 0 0 0 8.5 14a1.5 1.5 0 0 0 1.5 1.5 1.5 1.5 0 0 0 1.5-1.5 1.5 1.5 0 0 0-1.5-1.5M10 7a1 1 0 0 0 1-1 1 1 0 0 0-1-1 1 1 0 0 0-1 1 1 1 0 0 0 1 1m0-3.5a.5.5 0 0 0 .5-.5.5.5 0 0 0-.5-.5.5.5 0 0 0-.5.5.5.5 0 0 0 .5.5m0 17a.5.5 0 0 0-.5.5.5.5 0 0 0 .5.5.5.5 0 0 0 .5-.5.5.5 0 0 0-.5-.5m-7-7a.5.5 0 0 0-.5.5.5.5 0 0 0 .5.5.5.5 0 0 0 .5-.5.5.5 0 0 0-.5-.5m11-10a.5.5 0 0 0 .5-.5.5.5 0 0 0-.5-.5.5.5 0 0 0-.5.5.5.5 0 0 0 .5.5M14 7a1 1 0 0 0 1-1 1 1 0 0 0-1-1 1 1 0 0 0-1 1 1 1 0 0 0 1 1m7 3.5a.5.5 0 0 0 .5-.5.5.5 0 0 0-.5-.5.5.5 0 0 0-.5.5.5.5 0 0 0 .5.5M6 5a1 1 0 0 0-1 1 1 1 0 0 0 1 1 1 1 0 0 0 1-1 1 1 0 0 0-1-1M3 9.5a.5.5 0 0 0-.5.5.5.5 0 0 0 .5.5.5.5 0 0 0 .5-.5.5.5 0 0 0-.5-.5M6 9a1 1 0 0 0-1 1 1 1 0 0 0 1 1 1 1 0 0 0 1-1 1 1 0 0 0-1-1m0 8a1 1 0 0 0-1 1 1 1 0 0 0 1 1 1 1 0 0 0 1-1 1 1 0 0 0-1-1m0-4a1 1 0 0 0-1 1 1 1 0 0 0 1 1 1 1 0 0 0 1-1 1 1 0 0 0-1-1z"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            OutlierDetection.jl
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              PyDetectors
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"/></svg>
+      </label>
+      
+<div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" data-md-state="active" required>
+      <label class="md-search__icon md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+      </label>
+      <button type="reset" class="md-search__icon md-icon" aria-label="Clear" tabindex="-1">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z"/></svg>
+      </button>
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+      <div class="md-header__source">
+        
+<a href="https://github.com/davnn/OutlierDetection.jl/" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+      </div>
+    
+  </nav>
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-tabs__inner md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+
+
+  <li class="md-tabs__item">
+    <a href="../.." class="md-tabs__link">
+      Home
+    </a>
+  </li>
+
+      
+        
+  
+  
+
+
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../getting-started/installation/" class="md-tabs__link">
+        Getting started
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+
+
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../documentation/guide/" class="md-tabs__link">
+        Documentation
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+    
+  
+
+
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../base/" class="md-tabs__link md-tabs__link--active">
+        API
+      </a>
+    </li>
+  
+
+      
+    </ul>
+  </div>
+</nav>
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="OutlierDetection.jl" class="md-nav__button md-logo" aria-label="OutlierDetection.jl" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M14 8.5a1.5 1.5 0 0 0-1.5 1.5 1.5 1.5 0 0 0 1.5 1.5 1.5 1.5 0 0 0 1.5-1.5A1.5 1.5 0 0 0 14 8.5m0 4a1.5 1.5 0 0 0-1.5 1.5 1.5 1.5 0 0 0 1.5 1.5 1.5 1.5 0 0 0 1.5-1.5 1.5 1.5 0 0 0-1.5-1.5M10 17a1 1 0 0 0-1 1 1 1 0 0 0 1 1 1 1 0 0 0 1-1 1 1 0 0 0-1-1m0-8.5A1.5 1.5 0 0 0 8.5 10a1.5 1.5 0 0 0 1.5 1.5 1.5 1.5 0 0 0 1.5-1.5A1.5 1.5 0 0 0 10 8.5m4 12a.5.5 0 0 0-.5.5.5.5 0 0 0 .5.5.5.5 0 0 0 .5-.5.5.5 0 0 0-.5-.5m0-3.5a1 1 0 0 0-1 1 1 1 0 0 0 1 1 1 1 0 0 0 1-1 1 1 0 0 0-1-1m7-3.5a.5.5 0 0 0-.5.5.5.5 0 0 0 .5.5.5.5 0 0 0 .5-.5.5.5 0 0 0-.5-.5M18 5a1 1 0 0 0-1 1 1 1 0 0 0 1 1 1 1 0 0 0 1-1 1 1 0 0 0-1-1m0 4a1 1 0 0 0-1 1 1 1 0 0 0 1 1 1 1 0 0 0 1-1 1 1 0 0 0-1-1m0 8a1 1 0 0 0-1 1 1 1 0 0 0 1 1 1 1 0 0 0 1-1 1 1 0 0 0-1-1m0-4a1 1 0 0 0-1 1 1 1 0 0 0 1 1 1 1 0 0 0 1-1 1 1 0 0 0-1-1m-8-.5A1.5 1.5 0 0 0 8.5 14a1.5 1.5 0 0 0 1.5 1.5 1.5 1.5 0 0 0 1.5-1.5 1.5 1.5 0 0 0-1.5-1.5M10 7a1 1 0 0 0 1-1 1 1 0 0 0-1-1 1 1 0 0 0-1 1 1 1 0 0 0 1 1m0-3.5a.5.5 0 0 0 .5-.5.5.5 0 0 0-.5-.5.5.5 0 0 0-.5.5.5.5 0 0 0 .5.5m0 17a.5.5 0 0 0-.5.5.5.5 0 0 0 .5.5.5.5 0 0 0 .5-.5.5.5 0 0 0-.5-.5m-7-7a.5.5 0 0 0-.5.5.5.5 0 0 0 .5.5.5.5 0 0 0 .5-.5.5.5 0 0 0-.5-.5m11-10a.5.5 0 0 0 .5-.5.5.5 0 0 0-.5-.5.5.5 0 0 0-.5.5.5.5 0 0 0 .5.5M14 7a1 1 0 0 0 1-1 1 1 0 0 0-1-1 1 1 0 0 0-1 1 1 1 0 0 0 1 1m7 3.5a.5.5 0 0 0 .5-.5.5.5 0 0 0-.5-.5.5.5 0 0 0-.5.5.5.5 0 0 0 .5.5M6 5a1 1 0 0 0-1 1 1 1 0 0 0 1 1 1 1 0 0 0 1-1 1 1 0 0 0-1-1M3 9.5a.5.5 0 0 0-.5.5.5.5 0 0 0 .5.5.5.5 0 0 0 .5-.5.5.5 0 0 0-.5-.5M6 9a1 1 0 0 0-1 1 1 1 0 0 0 1 1 1 1 0 0 0 1-1 1 1 0 0 0-1-1m0 8a1 1 0 0 0-1 1 1 1 0 0 0 1 1 1 1 0 0 0 1-1 1 1 0 0 0-1-1m0-4a1 1 0 0 0-1 1 1 1 0 0 0 1 1 1 1 0 0 0 1-1 1 1 0 0 0-1-1z"/></svg>
+
+    </a>
+    OutlierDetection.jl
+  </label>
+  
+    <div class="md-nav__source">
+      
+<a href="https://github.com/davnn/OutlierDetection.jl/" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        Home
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_2" type="checkbox" id="__nav_2" >
+      
+      <label class="md-nav__link" for="__nav_2">
+        Getting started
+        <span class="md-nav__icon md-icon"></span>
+      </label>
+      <nav class="md-nav" aria-label="Getting started" data-md-level="1">
+        <label class="md-nav__title" for="__nav_2">
+          <span class="md-nav__icon md-icon"></span>
+          Getting started
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../getting-started/installation/" class="md-nav__link">
+        Installation
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../getting-started/example/" class="md-nav__link">
+        Example
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../getting-started/contributing/" class="md-nav__link">
+        Contributing
+      </a>
+    </li>
+  
+
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_3" type="checkbox" id="__nav_3" >
+      
+      <label class="md-nav__link" for="__nav_3">
+        Documentation
+        <span class="md-nav__icon md-icon"></span>
+      </label>
+      <nav class="md-nav" aria-label="Documentation" data-md-level="1">
+        <label class="md-nav__title" for="__nav_3">
+          <span class="md-nav__icon md-icon"></span>
+          Documentation
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../documentation/guide/" class="md-nav__link">
+        Guide
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    
+      
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_3_2" type="checkbox" id="__nav_3_2" >
+      
+      <label class="md-nav__link" for="__nav_3_2">
+        Tutorials
+        <span class="md-nav__icon md-icon"></span>
+      </label>
+      <nav class="md-nav" aria-label="Tutorials" data-md-level="2">
+        <label class="md-nav__title" for="__nav_3_2">
+          <span class="md-nav__icon md-icon"></span>
+          Tutorials
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../documentation/using-mlj/" class="md-nav__link">
+        Using MLJ
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../documentation/ensemble-learning/" class="md-nav__link">
+        Ensemble Learning
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../documentation/benchmark-datasets/" class="md-nav__link">
+        Benchmark Datasets
+      </a>
+    </li>
+  
+
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    
+      
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_3_3" type="checkbox" id="__nav_3_3" >
+      
+      <label class="md-nav__link" for="__nav_3_3">
+        For Developers
+        <span class="md-nav__icon md-icon"></span>
+      </label>
+      <nav class="md-nav" aria-label="For Developers" data-md-level="2">
+        <label class="md-nav__title" for="__nav_3_3">
+          <span class="md-nav__icon md-icon"></span>
+          For Developers
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../documentation/architecture/" class="md-nav__link">
+        Architecture
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../documentation/detector-creation/" class="md-nav__link">
+        Detector Creation
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../documentation/performance-tips/" class="md-nav__link">
+        Performance Tips
+      </a>
+    </li>
+  
+
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+    
+  
+  
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_4" type="checkbox" id="__nav_4" checked>
+      
+      <label class="md-nav__link" for="__nav_4">
+        API
+        <span class="md-nav__icon md-icon"></span>
+      </label>
+      <nav class="md-nav" aria-label="API" data-md-level="1">
+        <label class="md-nav__title" for="__nav_4">
+          <span class="md-nav__icon md-icon"></span>
+          API
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../base/" class="md-nav__link">
+        Base
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../classifiers/" class="md-nav__link">
+        Classifiers
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../detectors/" class="md-nav__link">
+        Detectors
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+    
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          PyDetectors
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        PyDetectors
+      </a>
+      
+        
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#pyabod" class="md-nav__link">
+    PyABOD
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#pycblof" class="md-nav__link">
+    PyCBLOF
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#pycof" class="md-nav__link">
+    PyCOF
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#pycopod" class="md-nav__link">
+    PyCOPOD
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#pyhbos" class="md-nav__link">
+    PyHBOS
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#pyiforest" class="md-nav__link">
+    PyIForest
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#pyknn" class="md-nav__link">
+    PyKNN
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#pylmdd" class="md-nav__link">
+    PyLMDD
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#pyloda" class="md-nav__link">
+    PyLODA
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#pylof" class="md-nav__link">
+    PyLOF
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#pyloci" class="md-nav__link">
+    PyLOCI
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#pymcd" class="md-nav__link">
+    PyMCD
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#pyocsvm" class="md-nav__link">
+    PyOCSVM
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#pypca" class="md-nav__link">
+    PyPCA
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#pyrod" class="md-nav__link">
+    PyROD
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#pysod" class="md-nav__link">
+    PySOD
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#pysos" class="md-nav__link">
+    PySOS
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../evaluation/" class="md-nav__link">
+        Evaluation
+      </a>
+    </li>
+  
+
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#pyabod" class="md-nav__link">
+    PyABOD
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#pycblof" class="md-nav__link">
+    PyCBLOF
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#pycof" class="md-nav__link">
+    PyCOF
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#pycopod" class="md-nav__link">
+    PyCOPOD
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#pyhbos" class="md-nav__link">
+    PyHBOS
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#pyiforest" class="md-nav__link">
+    PyIForest
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#pyknn" class="md-nav__link">
+    PyKNN
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#pylmdd" class="md-nav__link">
+    PyLMDD
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#pyloda" class="md-nav__link">
+    PyLODA
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#pylof" class="md-nav__link">
+    PyLOF
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#pyloci" class="md-nav__link">
+    PyLOCI
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#pymcd" class="md-nav__link">
+    PyMCD
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#pyocsvm" class="md-nav__link">
+    PyOCSVM
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#pypca" class="md-nav__link">
+    PyPCA
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#pyrod" class="md-nav__link">
+    PyROD
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#pysod" class="md-nav__link">
+    PySOD
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#pysos" class="md-nav__link">
+    PySOS
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          <div class="md-content" data-md-component="content">
+            <article class="md-content__inner md-typeset">
+              
+                
+                  <a href="https://github.com/davnn/OutlierDetection.jl/edit/master/docs/API/pydetectors.md" title="Edit this page" class="md-content__button md-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20.71 7.04c.39-.39.39-1.04 0-1.41l-2.34-2.34c-.37-.39-1.02-.39-1.41 0l-1.84 1.83 3.75 3.75M3 17.25V21h3.75L17.81 9.93l-3.75-3.75L3 17.25z"/></svg>
+                  </a>
+                
+                
+                <p><a id='Python-Detectors'></a></p>
+<p><a id='Python-Detectors-1'></a></p>
+<h1 id="python-detectors">Python Detectors</h1>
+<p>Using <a href="https://github.com/JuliaPy/PyCall.jl">PyCall</a>, we can easily integrate existing python outlier detection algorithms. Currently, almost every <a href="https://github.com/yzhao062/pyod">PyOD</a> algorithm is integrated and can thus be easily used directly from Julia. As a naming convention, every python detector is named <code>Py$NAME</code>.</p>
+<p><a id='PyABOD'></a></p>
+<p><a id='PyABOD-1'></a></p>
+<h2 id="pyabod">PyABOD</h2>
+<p><a id='OutlierDetection.PyABOD' href='#OutlierDetection.PyABOD'>#</a>
+<strong><code>OutlierDetection.PyABOD</code></strong> &mdash; <em>Type</em>.</p>
+<div class="highlight"><pre><span></span><code><span class="n">PyABOD</span><span class="p">(</span><span class="n">n_neighbors</span> <span class="o">=</span> <span class="mi">5</span><span class="p">,</span>
+          <span class="n">method</span> <span class="o">=</span> <span class="s">&quot;fast&quot;</span><span class="p">)</span>
+</code></pre></div>
+<p><a href="https://pyod.readthedocs.io/en/latest/pyod.models.html#module-pyod.models.abod">https://pyod.readthedocs.io/en/latest/pyod.models.html#module-pyod.models.abod</a></p>
+<p><a target='_blank' href='https://github.com/davnn/OutlierDetection.jl/blob/078fe9dc483b3322bc0d9b88c5f778389194ed68/src/pymodels/detectors.jl#LL1-L5' class='documenter-source'>source</a><br></p>
+<p><a id='PyCBLOF'></a></p>
+<p><a id='PyCBLOF-1'></a></p>
+<h2 id="pycblof">PyCBLOF</h2>
+<p><a id='OutlierDetection.PyCBLOF' href='#OutlierDetection.PyCBLOF'>#</a>
+<strong><code>OutlierDetection.PyCBLOF</code></strong> &mdash; <em>Type</em>.</p>
+<div class="highlight"><pre><span></span><code><span class="n">PyCBLOF</span><span class="p">(</span><span class="n">n_clusters</span> <span class="o">=</span> <span class="mi">8</span><span class="p">,</span>
+           <span class="n">alpha</span> <span class="o">=</span> <span class="mf">0.9</span><span class="p">,</span>
+           <span class="n">beta</span> <span class="o">=</span> <span class="mi">5</span><span class="p">,</span>
+           <span class="n">use_weights</span> <span class="o">=</span> <span class="kc">false</span><span class="p">,</span>
+           <span class="n">random_state</span> <span class="o">=</span> <span class="nb">nothing</span><span class="p">,</span>
+           <span class="n">n_jobs</span> <span class="o">=</span> <span class="mi">1</span><span class="p">)</span>
+</code></pre></div>
+<p><a href="https://pyod.readthedocs.io/en/latest/pyod.models.html#module-pyod.models.cblof">https://pyod.readthedocs.io/en/latest/pyod.models.html#module-pyod.models.cblof</a></p>
+<p><a target='_blank' href='https://github.com/davnn/OutlierDetection.jl/blob/078fe9dc483b3322bc0d9b88c5f778389194ed68/src/pymodels/detectors.jl#LL10-L18' class='documenter-source'>source</a><br></p>
+<p><a id='PyCOF'></a></p>
+<p><a id='PyCOF-1'></a></p>
+<h2 id="pycof">PyCOF</h2>
+<p><a id='OutlierDetection.PyCOF' href='#OutlierDetection.PyCOF'>#</a>
+<strong><code>OutlierDetection.PyCOF</code></strong> &mdash; <em>Type</em>.</p>
+<div class="highlight"><pre><span></span><code><span class="n">PyCOF</span><span class="p">(</span><span class="n">n_neighbors</span> <span class="o">=</span> <span class="mi">5</span><span class="p">)</span>
+</code></pre></div>
+<p><a href="https://pyod.readthedocs.io/en/latest/pyod.models.html#module-pyod.models.cof">https://pyod.readthedocs.io/en/latest/pyod.models.html#module-pyod.models.cof</a></p>
+<p><a target='_blank' href='https://github.com/davnn/OutlierDetection.jl/blob/078fe9dc483b3322bc0d9b88c5f778389194ed68/src/pymodels/detectors.jl#LL27-L30' class='documenter-source'>source</a><br></p>
+<p><a id='PyCOPOD'></a></p>
+<p><a id='PyCOPOD-1'></a></p>
+<h2 id="pycopod">PyCOPOD</h2>
+<p><a id='OutlierDetection.PyCOPOD' href='#OutlierDetection.PyCOPOD'>#</a>
+<strong><code>OutlierDetection.PyCOPOD</code></strong> &mdash; <em>Type</em>.</p>
+<div class="highlight"><pre><span></span><code><span class="n">PyCOPOD</span><span class="p">()</span>
+</code></pre></div>
+<p><a href="https://pyod.readthedocs.io/en/latest/pyod.models.html#module-pyod.models.copod">https://pyod.readthedocs.io/en/latest/pyod.models.html#module-pyod.models.copod</a></p>
+<p><a target='_blank' href='https://github.com/davnn/OutlierDetection.jl/blob/078fe9dc483b3322bc0d9b88c5f778389194ed68/src/pymodels/detectors.jl#LL34-L37' class='documenter-source'>source</a><br></p>
+<p><a id='PyHBOS'></a></p>
+<p><a id='PyHBOS-1'></a></p>
+<h2 id="pyhbos">PyHBOS</h2>
+<p><a id='OutlierDetection.PyHBOS' href='#OutlierDetection.PyHBOS'>#</a>
+<strong><code>OutlierDetection.PyHBOS</code></strong> &mdash; <em>Type</em>.</p>
+<div class="highlight"><pre><span></span><code><span class="n">PyHBOS</span><span class="p">(</span><span class="n">n_bins</span> <span class="o">=</span> <span class="mi">10</span><span class="p">,</span>
+          <span class="n">alpha</span> <span class="o">=</span> <span class="mf">0.1</span><span class="p">,</span>
+          <span class="n">tol</span> <span class="o">=</span> <span class="mf">0.5</span><span class="p">)</span>
+</code></pre></div>
+<p><a href="https://pyod.readthedocs.io/en/latest/pyod.models.html#module-pyod.models.hbos">https://pyod.readthedocs.io/en/latest/pyod.models.html#module-pyod.models.hbos</a></p>
+<p><a target='_blank' href='https://github.com/davnn/OutlierDetection.jl/blob/078fe9dc483b3322bc0d9b88c5f778389194ed68/src/pymodels/detectors.jl#LL39-L44' class='documenter-source'>source</a><br></p>
+<p><a id='PyIForest'></a></p>
+<p><a id='PyIForest-1'></a></p>
+<h2 id="pyiforest">PyIForest</h2>
+<p><a id='OutlierDetection.PyIForest' href='#OutlierDetection.PyIForest'>#</a>
+<strong><code>OutlierDetection.PyIForest</code></strong> &mdash; <em>Type</em>.</p>
+<div class="highlight"><pre><span></span><code><span class="n">PyIForest</span><span class="p">(</span><span class="n">n_estimators</span> <span class="o">=</span> <span class="mi">100</span><span class="p">,</span>
+             <span class="n">max_samples</span> <span class="o">=</span> <span class="s">&quot;auto&quot;</span><span class="p">,</span>
+             <span class="n">max_features</span> <span class="o">=</span> <span class="mf">1.0</span>
+             <span class="n">bootstrap</span> <span class="o">=</span> <span class="kc">false</span><span class="p">,</span>
+             <span class="n">behaviour</span> <span class="o">=</span> <span class="s">&quot;new&quot;</span><span class="p">,</span>
+             <span class="n">random_state</span> <span class="o">=</span> <span class="nb">nothing</span><span class="p">,</span>
+             <span class="n">verbose</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
+             <span class="n">n_jobs</span> <span class="o">=</span> <span class="mi">1</span><span class="p">)</span>
+</code></pre></div>
+<p><a href="https://pyod.readthedocs.io/en/latest/pyod.models.html#module-pyod.models.iforest">https://pyod.readthedocs.io/en/latest/pyod.models.html#module-pyod.models.iforest</a></p>
+<p><a target='_blank' href='https://github.com/davnn/OutlierDetection.jl/blob/078fe9dc483b3322bc0d9b88c5f778389194ed68/src/pymodels/detectors.jl#LL50-L60' class='documenter-source'>source</a><br></p>
+<p><a id='PyKNN'></a></p>
+<p><a id='PyKNN-1'></a></p>
+<h2 id="pyknn">PyKNN</h2>
+<p><a id='OutlierDetection.PyKNN' href='#OutlierDetection.PyKNN'>#</a>
+<strong><code>OutlierDetection.PyKNN</code></strong> &mdash; <em>Type</em>.</p>
+<div class="highlight"><pre><span></span><code><span class="n">PyKNN</span><span class="p">(</span><span class="n">n_neighbors</span> <span class="o">=</span> <span class="mi">5</span><span class="p">,</span>
+         <span class="n">method</span> <span class="o">=</span> <span class="s">&quot;largest&quot;</span><span class="p">,</span>
+         <span class="n">radius</span> <span class="o">=</span> <span class="mf">1.0</span><span class="p">,</span>
+         <span class="n">algorithm</span> <span class="o">=</span> <span class="s">&quot;auto&quot;</span><span class="p">,</span>
+         <span class="n">leaf_size</span> <span class="o">=</span> <span class="mi">30</span><span class="p">,</span>
+         <span class="n">metric</span> <span class="o">=</span> <span class="s">&quot;minkowski&quot;</span><span class="p">,</span>
+         <span class="n">p</span> <span class="o">=</span> <span class="mi">2</span><span class="p">,</span>
+         <span class="n">metric_params</span> <span class="o">=</span> <span class="nb">nothing</span><span class="p">,</span>
+         <span class="n">n_jobs</span> <span class="o">=</span> <span class="mi">1</span><span class="p">)</span>
+</code></pre></div>
+<p><a href="https://pyod.readthedocs.io/en/latest/pyod.models.html#module-pyod.models.knn">https://pyod.readthedocs.io/en/latest/pyod.models.html#module-pyod.models.knn</a></p>
+<p><a target='_blank' href='https://github.com/davnn/OutlierDetection.jl/blob/078fe9dc483b3322bc0d9b88c5f778389194ed68/src/pymodels/detectors.jl#LL71-L82' class='documenter-source'>source</a><br></p>
+<p><a id='PyLMDD'></a></p>
+<p><a id='PyLMDD-1'></a></p>
+<h2 id="pylmdd">PyLMDD</h2>
+<p><a id='OutlierDetection.PyLMDD' href='#OutlierDetection.PyLMDD'>#</a>
+<strong><code>OutlierDetection.PyLMDD</code></strong> &mdash; <em>Type</em>.</p>
+<div class="highlight"><pre><span></span><code><span class="n">PyLMDD</span><span class="p">(</span><span class="n">n_iter</span> <span class="o">=</span> <span class="mi">50</span><span class="p">,</span>
+          <span class="n">dis_measure</span> <span class="o">=</span> <span class="s">&quot;aad&quot;</span><span class="p">,</span>
+          <span class="n">random_state</span> <span class="o">=</span> <span class="nb">nothing</span><span class="p">)</span>
+</code></pre></div>
+<p><a href="https://pyod.readthedocs.io/en/latest/pyod.models.html#module-pyod.models.lmdd">https://pyod.readthedocs.io/en/latest/pyod.models.html#module-pyod.models.lmdd</a></p>
+<p><a target='_blank' href='https://github.com/davnn/OutlierDetection.jl/blob/078fe9dc483b3322bc0d9b88c5f778389194ed68/src/pymodels/detectors.jl#LL94-L99' class='documenter-source'>source</a><br></p>
+<p><a id='PyLODA'></a></p>
+<p><a id='PyLODA-1'></a></p>
+<h2 id="pyloda">PyLODA</h2>
+<p><a id='OutlierDetection.PyLODA' href='#OutlierDetection.PyLODA'>#</a>
+<strong><code>OutlierDetection.PyLODA</code></strong> &mdash; <em>Type</em>.</p>
+<div class="highlight"><pre><span></span><code><span class="n">PyLODA</span><span class="p">(</span><span class="n">n_bins</span> <span class="o">=</span> <span class="mi">10</span><span class="p">,</span>
+          <span class="n">n_random_cuts</span> <span class="o">=</span> <span class="mi">100</span><span class="p">)</span>
+</code></pre></div>
+<p><a href="https://pyod.readthedocs.io/en/latest/pyod.models.html#module-pyod.models.loda">https://pyod.readthedocs.io/en/latest/pyod.models.html#module-pyod.models.loda</a></p>
+<p><a target='_blank' href='https://github.com/davnn/OutlierDetection.jl/blob/078fe9dc483b3322bc0d9b88c5f778389194ed68/src/pymodels/detectors.jl#LL105-L109' class='documenter-source'>source</a><br></p>
+<p><a id='PyLOF'></a></p>
+<p><a id='PyLOF-1'></a></p>
+<h2 id="pylof">PyLOF</h2>
+<p><a id='OutlierDetection.PyLOF' href='#OutlierDetection.PyLOF'>#</a>
+<strong><code>OutlierDetection.PyLOF</code></strong> &mdash; <em>Type</em>.</p>
+<div class="highlight"><pre><span></span><code><span class="n">PyLOF</span><span class="p">(</span><span class="n">n_neighbors</span> <span class="o">=</span> <span class="mi">5</span><span class="p">,</span>
+         <span class="n">method</span> <span class="o">=</span> <span class="s">&quot;largest&quot;</span><span class="p">,</span>
+         <span class="n">algorithm</span> <span class="o">=</span> <span class="s">&quot;auto&quot;</span><span class="p">,</span>
+         <span class="n">leaf_size</span> <span class="o">=</span> <span class="mi">30</span><span class="p">,</span>
+         <span class="n">metric</span> <span class="o">=</span> <span class="s">&quot;minkowski&quot;</span><span class="p">,</span>
+         <span class="n">p</span> <span class="o">=</span> <span class="mi">2</span><span class="p">,</span>
+         <span class="n">metric_params</span> <span class="o">=</span> <span class="nb">nothing</span><span class="p">,</span>
+         <span class="n">n_jobs</span> <span class="o">=</span> <span class="mi">1</span><span class="p">)</span>
+</code></pre></div>
+<p><a href="https://pyod.readthedocs.io/en/latest/pyod.models.html#module-pyod.models.lof">https://pyod.readthedocs.io/en/latest/pyod.models.html#module-pyod.models.lof</a></p>
+<p><a target='_blank' href='https://github.com/davnn/OutlierDetection.jl/blob/078fe9dc483b3322bc0d9b88c5f778389194ed68/src/pymodels/detectors.jl#LL114-L124' class='documenter-source'>source</a><br></p>
+<p><a id='PyLOCI'></a></p>
+<p><a id='PyLOCI-1'></a></p>
+<h2 id="pyloci">PyLOCI</h2>
+<p><a id='OutlierDetection.PyLOCI' href='#OutlierDetection.PyLOCI'>#</a>
+<strong><code>OutlierDetection.PyLOCI</code></strong> &mdash; <em>Type</em>.</p>
+<div class="highlight"><pre><span></span><code><span class="n">PyLOCI</span><span class="p">(</span><span class="n">alpha</span> <span class="o">=</span> <span class="mf">0.5</span><span class="p">,</span>
+          <span class="n">k</span> <span class="o">=</span> <span class="mi">3</span><span class="p">)</span>
+</code></pre></div>
+<p><a href="https://pyod.readthedocs.io/en/latest/pyod.models.html#module-pyod.models.loci">https://pyod.readthedocs.io/en/latest/pyod.models.html#module-pyod.models.loci</a></p>
+<p><a target='_blank' href='https://github.com/davnn/OutlierDetection.jl/blob/078fe9dc483b3322bc0d9b88c5f778389194ed68/src/pymodels/detectors.jl#LL134-L138' class='documenter-source'>source</a><br></p>
+<p><a id='PyMCD'></a></p>
+<p><a id='PyMCD-1'></a></p>
+<h2 id="pymcd">PyMCD</h2>
+<p><a id='OutlierDetection.PyMCD' href='#OutlierDetection.PyMCD'>#</a>
+<strong><code>OutlierDetection.PyMCD</code></strong> &mdash; <em>Type</em>.</p>
+<div class="highlight"><pre><span></span><code><span class="n">PyMCD</span><span class="p">(</span><span class="n">store_precision</span> <span class="o">=</span> <span class="kc">true</span><span class="p">,</span>
+         <span class="n">assume_centered</span> <span class="o">=</span> <span class="kc">false</span><span class="p">,</span>
+         <span class="n">support_fraction</span> <span class="o">=</span> <span class="nb">nothing</span><span class="p">,</span>
+         <span class="n">random_state</span> <span class="o">=</span> <span class="nb">nothing</span><span class="p">)</span>
+</code></pre></div>
+<p><a href="https://pyod.readthedocs.io/en/latest/pyod.models.html#module-pyod.models.mcd">https://pyod.readthedocs.io/en/latest/pyod.models.html#module-pyod.models.mcd</a></p>
+<p><a target='_blank' href='https://github.com/davnn/OutlierDetection.jl/blob/078fe9dc483b3322bc0d9b88c5f778389194ed68/src/pymodels/detectors.jl#LL143-L149' class='documenter-source'>source</a><br></p>
+<p><a id='PyOCSVM'></a></p>
+<p><a id='PyOCSVM-1'></a></p>
+<h2 id="pyocsvm">PyOCSVM</h2>
+<p><a id='OutlierDetection.PyOCSVM' href='#OutlierDetection.PyOCSVM'>#</a>
+<strong><code>OutlierDetection.PyOCSVM</code></strong> &mdash; <em>Type</em>.</p>
+<div class="highlight"><pre><span></span><code><span class="n">PyOCSVM</span><span class="p">(</span><span class="n">kernel</span> <span class="o">=</span> <span class="s">&quot;rbf&quot;</span><span class="p">,</span>
+           <span class="n">degree</span> <span class="o">=</span> <span class="mi">3</span><span class="p">,</span>
+           <span class="n">gamma</span> <span class="o">=</span> <span class="s">&quot;auto&quot;</span><span class="p">,</span>
+           <span class="n">coef0</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">,</span>
+           <span class="n">tol</span> <span class="o">=</span> <span class="mf">0.001</span><span class="p">,</span>
+           <span class="n">nu</span> <span class="o">=</span> <span class="mf">0.5</span><span class="p">,</span>
+           <span class="n">shrinking</span> <span class="o">=</span> <span class="kc">true</span><span class="p">,</span>
+           <span class="n">cache_size</span> <span class="o">=</span> <span class="mi">200</span><span class="p">,</span>
+           <span class="n">verbose</span> <span class="o">=</span> <span class="kc">false</span><span class="p">,</span>
+           <span class="n">max_iter</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+</code></pre></div>
+<p><a href="https://pyod.readthedocs.io/en/latest/pyod.models.html#module-pyod.models.ocsvm">https://pyod.readthedocs.io/en/latest/pyod.models.html#module-pyod.models.ocsvm</a></p>
+<p><a target='_blank' href='https://github.com/davnn/OutlierDetection.jl/blob/078fe9dc483b3322bc0d9b88c5f778389194ed68/src/pymodels/detectors.jl#LL156-L168' class='documenter-source'>source</a><br></p>
+<p><a id='PyPCA'></a></p>
+<p><a id='PyPCA-1'></a></p>
+<h2 id="pypca">PyPCA</h2>
+<p><a id='OutlierDetection.PyPCA' href='#OutlierDetection.PyPCA'>#</a>
+<strong><code>OutlierDetection.PyPCA</code></strong> &mdash; <em>Type</em>.</p>
+<div class="highlight"><pre><span></span><code><span class="n">PyPCA</span><span class="p">(</span><span class="n">n_components</span> <span class="o">=</span> <span class="nb">nothing</span><span class="p">,</span>
+         <span class="n">n_selected_components</span> <span class="o">=</span> <span class="nb">nothing</span><span class="p">,</span>
+         <span class="n">copy</span> <span class="o">=</span> <span class="kc">true</span><span class="p">,</span>
+         <span class="n">whiten</span> <span class="o">=</span> <span class="kc">false</span><span class="p">,</span>
+         <span class="n">svd_solver</span> <span class="o">=</span> <span class="s">&quot;auto&quot;</span><span class="p">,</span>
+         <span class="n">tol</span> <span class="o">=</span> <span class="mf">0.0</span>
+         <span class="n">iterated_power</span> <span class="o">=</span> <span class="s">&quot;auto&quot;</span><span class="p">,</span>
+         <span class="n">standardization</span> <span class="o">=</span> <span class="kc">true</span><span class="p">,</span>
+         <span class="n">weighted</span> <span class="o">=</span> <span class="kc">true</span><span class="p">,</span>
+         <span class="n">random_state</span> <span class="o">=</span> <span class="nb">nothing</span><span class="p">)</span>
+</code></pre></div>
+<p><a href="https://pyod.readthedocs.io/en/latest/pyod.models.html#module-pyod.models.pca">https://pyod.readthedocs.io/en/latest/pyod.models.html#module-pyod.models.pca</a></p>
+<p><a target='_blank' href='https://github.com/davnn/OutlierDetection.jl/blob/078fe9dc483b3322bc0d9b88c5f778389194ed68/src/pymodels/detectors.jl#LL181-L193' class='documenter-source'>source</a><br></p>
+<p><a id='PyROD'></a></p>
+<p><a id='PyROD-1'></a></p>
+<h2 id="pyrod">PyROD</h2>
+<p><a id='OutlierDetection.PyROD' href='#OutlierDetection.PyROD'>#</a>
+<strong><code>OutlierDetection.PyROD</code></strong> &mdash; <em>Type</em>.</p>
+<div class="highlight"><pre><span></span><code><span class="n">PyROD</span><span class="p">(</span><span class="n">parallel_execution</span> <span class="o">=</span> <span class="kc">false</span><span class="p">)</span>
+</code></pre></div>
+<p><a href="https://pyod.readthedocs.io/en/latest/pyod.models.html#module-pyod.models.rod">https://pyod.readthedocs.io/en/latest/pyod.models.html#module-pyod.models.rod</a></p>
+<p><a target='_blank' href='https://github.com/davnn/OutlierDetection.jl/blob/078fe9dc483b3322bc0d9b88c5f778389194ed68/src/pymodels/detectors.jl#LL206-L209' class='documenter-source'>source</a><br></p>
+<p><a id='PySOD'></a></p>
+<p><a id='PySOD-1'></a></p>
+<h2 id="pysod">PySOD</h2>
+<p><a id='OutlierDetection.PySOD' href='#OutlierDetection.PySOD'>#</a>
+<strong><code>OutlierDetection.PySOD</code></strong> &mdash; <em>Type</em>.</p>
+<div class="highlight"><pre><span></span><code><span class="n">PySOD</span><span class="p">(</span><span class="n">n_neighbors</span> <span class="o">=</span> <span class="mi">5</span><span class="p">,</span>
+         <span class="n">ref_set</span> <span class="o">=</span> <span class="mi">10</span><span class="p">,</span>
+         <span class="n">alpha</span> <span class="o">=</span> <span class="mf">0.8</span><span class="p">)</span>
+</code></pre></div>
+<p><a href="https://pyod.readthedocs.io/en/latest/pyod.models.html#module-pyod.models.sod">https://pyod.readthedocs.io/en/latest/pyod.models.html#module-pyod.models.sod</a></p>
+<p><a target='_blank' href='https://github.com/davnn/OutlierDetection.jl/blob/078fe9dc483b3322bc0d9b88c5f778389194ed68/src/pymodels/detectors.jl#LL213-L218' class='documenter-source'>source</a><br></p>
+<p><a id='PySOS'></a></p>
+<p><a id='PySOS-1'></a></p>
+<h2 id="pysos">PySOS</h2>
+<p><a id='OutlierDetection.PySOS' href='#OutlierDetection.PySOS'>#</a>
+<strong><code>OutlierDetection.PySOS</code></strong> &mdash; <em>Type</em>.</p>
+<div class="highlight"><pre><span></span><code><span class="n">PySOS</span><span class="p">(</span><span class="n">perplexity</span> <span class="o">=</span> <span class="mf">4.5</span><span class="p">,</span>
+         <span class="n">metric</span> <span class="o">=</span> <span class="s">&quot;minkowski&quot;</span><span class="p">,</span>
+         <span class="n">eps</span> <span class="o">=</span> <span class="mf">1e-5</span><span class="p">)</span>
+</code></pre></div>
+<p><a href="https://pyod.readthedocs.io/en/latest/pyod.models.html#module-pyod.models.sos">https://pyod.readthedocs.io/en/latest/pyod.models.html#module-pyod.models.sos</a></p>
+<p><a target='_blank' href='https://github.com/davnn/OutlierDetection.jl/blob/078fe9dc483b3322bc0d9b88c5f778389194ed68/src/pymodels/detectors.jl#LL224-L229' class='documenter-source'>source</a><br></p>
+                
+              
+              
+                
+
+
+              
+            </article>
+          </div>
+        </div>
+        
+      </main>
+      
+        
+<footer class="md-footer">
+  
+    <nav class="md-footer__inner md-grid" aria-label="Footer">
+      
+        <a href="../detectors/" class="md-footer__link md-footer__link--prev" rel="prev">
+          <div class="md-footer__button md-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+          </div>
+          <div class="md-footer__title">
+            <div class="md-ellipsis">
+              <span class="md-footer__direction">
+                Previous
+              </span>
+              Detectors
+            </div>
+          </div>
+        </a>
+      
+      
+        <a href="../evaluation/" class="md-footer__link md-footer__link--next" rel="next">
+          <div class="md-footer__title">
+            <div class="md-ellipsis">
+              <span class="md-footer__direction">
+                Next
+              </span>
+              Evaluation
+            </div>
+          </div>
+          <div class="md-footer__button md-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11H4z"/></svg>
+          </div>
+        </a>
+      
+    </nav>
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-footer-copyright">
+        
+        Made with
+        <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+          Material for MkDocs
+        </a>
+        
+      </div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    <script id="__config" type="application/json">{"base": "../..", "features": ["navigation.tabs", "navigation.instant", "navigation.sections"], "translations": {"clipboard.copy": "Copy to clipboard", "clipboard.copied": "Copied to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.placeholder": "Type to start searching", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.term.missing": "Missing"}, "search": "../../assets/javascripts/workers/search.fe42c31b.min.js", "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.4ea5477f.min.js"></script>
+      
+    
+  </body>
+</html>
