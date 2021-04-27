@@ -414,6 +414,20 @@
     </label>
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
+        <li class="md-nav__item">
+  <a href="#key-concepts" class="md-nav__link">
+    Key Concepts
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#interoperation-with-mlj" class="md-nav__link">
+    Interoperation with MLJ
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -673,6 +687,20 @@
     </label>
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
+        <li class="md-nav__item">
+  <a href="#key-concepts" class="md-nav__link">
+    Key Concepts
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#interoperation-with-mlj" class="md-nav__link">
+    Interoperation with MLJ
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -693,7 +721,59 @@
                 <p><a id='Guide'></a></p>
 <p><a id='Guide-1'></a></p>
 <h1 id="guide">Guide</h1>
-<p>TODO</p>
+<p>This guide should provide you the necessary knowledge to work with <code>OutlierDetection.jl</code> and understand the concepts behind the library design.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Outlier detection is predominantly an <em>unsupervised learning task</em>, transforming each data point to an <em>outlier score</em> quantifying the level of "outlierness". This very general form of output retains all the information provided by a specific algorithm.</p>
+</div>
+<p><a id='Key-Concepts'></a></p>
+<p><a id='Key-Concepts-1'></a></p>
+<h2 id="key-concepts">Key Concepts</h2>
+<p>The key design choice of OutlierDetection.jl is promoting the usage of <em>outlier scores</em>, not labels. The main data type, a <a href="../../API/base/#OutlierDetection.Detector"><code>Detector</code></a>, has to implement two methods: <a href="../../API/base/#OutlierDetection.fit"><code>fit</code></a> and <a href="../../API/base/#OutlierDetection.score"><code>score</code></a>.</p>
+<ul>
+<li><a href="../../API/base/#OutlierDetection.Detector"><code>Detector</code></a>: A <code>struct</code> defining the hyperparameters for an outlier detection algorithm, just like an estimator in <a href="https://scikit-learn.org/stable/developers/develop.html">scikit-learn</a>.</li>
+<li><a href="../../API/base/#OutlierDetection.fit"><code>fit</code></a>: Learn a <a href="../../API/base/#OutlierDetection.Model"><code>Model</code></a> for a specific detector from input data <code>X</code> and labels <code>y</code> (if supervised), for example the weights of a neural network.</li>
+<li><a href="../../API/base/#OutlierDetection.score"><code>score</code></a>: Using a detector and a learned model, transform unseen data into outlier scores.</li>
+</ul>
+<p>Transforming the outlier scores to labels is seen as the last step of an outlier detection task. A <a href="../../API/base/#OutlierDetection.Classifier"><code>Classifier</code></a> simply turns scores into labels, typically with two classes describing inliers <code>(1)</code> and outliers <code>(-1)</code>. A classifier has to implement a single method: <code>detect</code>.</p>
+<ul>
+<li><a href="../../API/base/#OutlierDetection.detect"><code>detect</code></a>: Transform outlier scores to inlier and outlier classes.</li>
+</ul>
+<p>A convention used in OutlierDetection.jl is that <em>higher scores always imply higher outlierness</em>.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>A peculiarity of working with outlier scores is the distinction between <em>train scores</em> and <em>test scores</em>. Train scores result from fitting a detector (<a href="../../API/base/#OutlierDetection.fit"><code>fit</code></a>), and test scores result from using predicting unseen data (<a href="../../API/base/#OutlierDetection.score"><code>score</code></a>). Classifying an instance as an inlier or outlier always requires a comparison to the train scores.</p>
+</div>
+<p>Let's see how the data looks like in a typical outlier detection task. We use the following naming conventions for the data we are working with:</p>
+<div class="highlight"><pre><span></span><code><span class="n">Data</span><span class="o">::</span><span class="kt">AbstractArray</span><span class="p">{</span><span class="o">&lt;:</span><span class="kt">Real</span><span class="p">}</span>
+<span class="n">Scores</span><span class="o">::</span><span class="kt">AbstractVector</span><span class="p">{</span><span class="o">&lt;:</span><span class="kt">Real</span><span class="p">}</span>
+<span class="n">Labels</span><span class="o">::</span><span class="kt">AbstractVector</span><span class="p">{</span><span class="o">&lt;:</span><span class="kt">Integer</span><span class="p">}</span>
+<span class="n">Result</span><span class="o">::</span><span class="kt">Tuple</span><span class="p">{</span><span class="n">Scores</span><span class="p">,</span> <span class="n">Scores</span><span class="p">}</span>
+</code></pre></div>
+<p>Because train scores are essential in classification, we often work with tuples of training and test scores and call such a tuple a <code>Result</code>. One last previously unmentioned structure is the <code>Fit</code> result, a <code>struct</code> that bundles the learned model and training scores. Let's now looks how the methods defined by OutlierDetection.jl transform the mentioned data structures.</p>
+<div class="highlight"><pre><span></span><code><span class="n">fit</span><span class="p">(</span><span class="o">::</span><span class="n">UnsupervisedDetector</span><span class="p">,</span> <span class="o">::</span><span class="n">Data</span><span class="p">)</span><span class="o">::</span><span class="n">Fit</span>
+<span class="n">fit</span><span class="p">(</span><span class="o">::</span><span class="n">SupervisedDetector</span><span class="p">,</span> <span class="o">::</span><span class="n">Data</span><span class="p">,</span> <span class="o">::</span><span class="n">Labels</span><span class="p">)</span><span class="o">::</span><span class="n">Fit</span>
+<span class="n">score</span><span class="p">(</span><span class="o">::</span><span class="n">Detector</span><span class="p">,</span> <span class="o">::</span><span class="n">Fit</span><span class="p">,</span> <span class="o">::</span><span class="n">Data</span><span class="p">)</span><span class="o">::</span><span class="n">Result</span>
+<span class="n">detect</span><span class="p">(</span><span class="o">::</span><span class="n">Classifier</span><span class="p">,</span> <span class="o">::</span><span class="n">Result</span><span class="o">...</span><span class="p">)</span><span class="o">::</span><span class="n">Labels</span>
+</code></pre></div>
+<p>One last thing to not is that there are many convenience data transformations implemented. You can use any <a href="https://github.com/JuliaData/Tables.jl">Tables.jl</a> compatible data source and the framework will make sure that the detectors receive the data in the suitable form. Also, note that <code>detect</code> can work with arbitrarily many results, which is very convenient if you want to combine the results of different detectors.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>If you are using native Julia arrays <code>AbstractArray{&lt;:Real}</code> as input data, we expect the data to be formatted using the columns-as-observations convention for improved performance with Julia's column-major data. Every other input data will be transposed and converted to an array implicitly.</p>
+</div>
+<p><a id='Interoperation-with-MLJ'></a></p>
+<p><a id='Interoperation-with-MLJ-1'></a></p>
+<h2 id="interoperation-with-mlj">Interoperation with MLJ</h2>
+<p>One of the exciting features of OutlierDetection.jl is it's interoperability with the rest of Julia's machine learning ecosystem. You might want to preprocess your data, cluster it, detect outliers, classify, and so forth.</p>
+<p>In MLJ, we bind data to a detector using a <a href="https://alan-turing-institute.github.io/MLJ.jl/dev/machines/"><code>machine</code></a>. This data binding allows greater flexibility in later usage; for example, if you use cross-validation for evaluation, the data is split automatically behind the scenes. A machine further enables us to <em>implicitly</em> pass data and learned models to the <code>fit</code> and <code>score</code> methods.</p>
+<p>From a usage perspective, the main differences are:</p>
+<ul>
+<li>A <code>Detector</code> is bound to data, either through <code>machine(::UnsupervisedDetector, X)</code>, or <code>machine(::SupervisedDetector, X, y)</code>.</li>
+<li><code>fit(::Detector, X, [y])</code> becomes <code>fit!(machine)</code></li>
+<li><code>score(::Detector, ::Fit, X)</code> becomes <code>transform(machine)</code></li>
+<li><code>detect(::Classifier, ::Results...)</code> becomes <code>transform(machine(::Classifier), ::Results...)</code></li>
+</ul>
+<p>Take a look at <a href="../../documentation/using-mlj/">Using MLJ</a> to learn more.</p>
                 
               
               
