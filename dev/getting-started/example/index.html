@@ -727,7 +727,7 @@
 <span class="k">using</span> <span class="n">OutlierDetectionData</span><span class="o">:</span> <span class="n">ODDS</span>
 </code></pre></div>
 <p>Download and read the <code>"thyroid"</code> dataset from the <code>ODDS</code> collection.</p>
-<div class="highlight"><pre><span></span><code><span class="n">X</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">ODDS</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="s">&quot;thyroid&quot;</span><span class="p">)</span>
+<div class="highlight"><pre><span></span><code><span class="n">X</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">ODDS</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s">&quot;thyroid&quot;</span><span class="p">)</span>
 </code></pre></div>
 <p>Create indices to split the data into 50% training and test data.</p>
 <div class="highlight"><pre><span></span><code>n_train = Int(length(y) * 0.5)
