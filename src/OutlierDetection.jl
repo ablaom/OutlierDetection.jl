@@ -1,9 +1,9 @@
 module OutlierDetection
-    using MLJModelInterface
+    using MLJBase
     using NearestNeighbors
     using MacroTools
     using Distances
-    const MMI = MLJModelInterface
+    const MMI = MLJBase
     const NN = NearestNeighbors
     const DI = Distances
     const CLASS_NORMAL = 1
@@ -73,6 +73,13 @@ module OutlierDetection
     # basic types
     include("base.jl")
 
+    # evaluation
+    include("evaluate/evaluate.jl")
+    include("evaluate/roc.jl")
+
+    # macros
+    include("macros.jl")
+
     # utilities
     include("utils/neighbors.jl")
     include("utils/neural.jl")
@@ -88,11 +95,6 @@ module OutlierDetection
     include("models/lof.jl")
     include("pymodels/utils.jl")
     include("pymodels/detectors.jl")
-
-    # evaluation
-    include("evaluate/evaluate.jl")
-    include("evaluate/classifier.jl")
-    include("evaluate/roc.jl")
 
     # examples
     include("examples/examples.jl")

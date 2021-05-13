@@ -10,7 +10,11 @@ Local outlier density based on chaining distance between graphs of neighbors, as
 
 Parameters
 ----------
+$_k_param
+
 $_knn_params
+
+$_default_params
 
 Examples
 --------
@@ -21,13 +25,8 @@ References
 [1] Tang, Jian; Chen, Zhixiang; Fu, Ada Wai-Chee; Cheung, David Wai-Lok (2002): Enhancing Effectiveness of Outlier
 Detections for Low Density Patterns.
 """
-MMI.@mlj_model mutable struct COF <: UnsupervisedDetector
+@detector_model NNTemplate mutable struct COF <: UnsupervisedDetector
     k::Integer = 5::(_ > 0)
-    metric::DI.Metric = DI.Euclidean()
-    algorithm::Symbol = :kdtree::(_ in (:kdtree, :balltree))
-    leafsize::Integer = 10::(_ ≥ 0)
-    reorder::Bool = true
-    parallel::Bool = false
 end
 
 struct COFModel <: Model
@@ -47,13 +46,14 @@ function fit(detector::COF, X::Data)::Fit
     tree = buildTree(X, detector.metric, detector.algorithm, detector.leafsize, detector.reorder)
 
     # We need k + 1 neighbors to calculate the chaining distance and have to make sure the indices are sorted 
-    idxs, _ = NN.knn(tree, X, detector.k + 1, true)
+    idxs, _ = knn_others(tree, X, detector.k + 1)
     acds = _calc_acds(idxs, pdists, detector.k)
     scores = _cof(idxs, acds, detector.k)
     Fit(COFModel(tree, pdists, acds), scores)
 end
 
-@score function score(detector::COF, model::Fit, X::Data)::Result
+function score(detector::COF, fitresult::Fit, X::Data)::Scores
+    model = fitresult.model
     if detector.parallel
         idxs, _ = knn_parallel(model.tree, X, detector.k + 1, true)
         return _cof(idxs, model.pdists, model.acds, detector.k)

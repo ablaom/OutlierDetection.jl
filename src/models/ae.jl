@@ -24,6 +24,8 @@ $_ae_params
 
 $_ae_loss
 
+$_default_params
+
 Examples
 --------
 $(_score_unsupervised("AE"))
@@ -32,7 +34,7 @@ References
 ----------
 [1] Aggarwal, Charu C. (2017): Outlier Analysis.
 """
-MMI.@mlj_model struct AE <: UnsupervisedDetector
+@detector_model struct AE <: UnsupervisedDetector
     encoder::Chain = Chain()
     decoder::Chain = Chain()
     batchsize::Integer = 32
@@ -60,6 +62,6 @@ function fit(detector::AE, X::Data)::Fit
     Fit(AEModel(model), scores)
 end
 
-@score function score(detector::AE, model::Fit, X::Data)::Result
-    detector.loss(model.chain(X), X, agg=instance_mean)
+function score(detector::AE, fitresult::Fit, X::Data)::Scores
+    detector.loss(fitresult.model.chain(X), X, agg=instance_mean)
 end

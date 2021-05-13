@@ -35,6 +35,8 @@ numerical stability.
 *Experimental parameter that might change*. A function to be called after the model parameters have been updated that
 can call Flux's callback helpers, see <https://fluxml.ai/Flux.jl/stable/utilities/#Callback-Helpers-1>.
 
+$_default_params
+
 **Notice:** The parameters `batchsize`, `epochs`, `shuffle`, `partial`, `opt` and `callback` can also be tuples of size
 2, specifying the corresponding values for (1) pretraining and (2) training; otherwise the same values are used for
 pretraining and training.
@@ -59,7 +61,7 @@ mutable struct DeepSAD <: SupervisedDetector
     loss::Function
     eta::Number
     eps::Number
-    callback
+    callback::Function
     function DeepSAD(;encoder::Chain = Chain(), decoder::Chain = Chain(), batchsize=32, epochs=1, shuffle=false,
         partial=true, opt=ADAM(), loss=mse, eta=1, eps=1e-6, callback=_ -> () -> ())
 
@@ -105,8 +107,8 @@ function fit(detector::DeepSAD, X::Data, y::Labels)::Fit
     Fit(DeepSADModel(model, center), scores)
 end
 
-@score function score(detector::DeepSAD, model::Fit, X::Data)::Result
-    svddScore(detector.encoder(X), model.center, ndims(X))
+function score(detector::DeepSAD, fitresult::Fit, X::Data)::Scores
+    svddScore(detector.encoder(X), fitresult.model.center, ndims(X))
 end
 
 function svddLoss(latent, center, y, eta, eps, dims)

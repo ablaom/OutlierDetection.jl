@@ -1,7 +1,7 @@
-const _knn_params = """    k::Integer
-Number of neighbors (must be greater than 0).
+const _k_param = """    k::Integer
+Number of neighbors (must be greater than 0)."""
 
-    metric::Metric
+const _knn_params = """    metric::Metric
 This is one of the Metric types defined in the Distances.jl package. It is possible to define your own metrics by
 creating new types that are subtypes of Metric.
 
@@ -66,21 +66,26 @@ function dnn_parallel(tree::NN.NNTree, X::AbstractArray, d::Real, sort::Bool = f
     scores
 end
 
-# TODO: Make a simple macro for copying lines of text to other places work with MLJ style definitions, see example
-# below; this would allow us to share templates between different detectors
-# macro copy(name, definition)
-#     return quote
-#         macro $(esc(name))()
-#             esc($(Expr(:quote, definition)))
-#         end
-#     end
-# end
+"""
+    knn_others
 
-# @copy KNNTemplate begin
-#     k::Integer = 5::(_ > 0)
-#     metric::DI.Metric = DI.Euclidean()
-#     algorithm::Symbol = :kdtree::(_ in (:kdtree, :balltree))
-#     leafsize::Integer = 10::(_ ≥ 0)
-#     reorder::Bool = true
-#     parallel::Bool = false
-# end
+Calculate the k-nearest neighbors without including the own included during previous tree construction.
+"""
+function knn_others(tree::NN.NNTree, X::AbstractArray, k::Integer)::Tuple{AbstractVector, AbstractVector}
+    idxs, dists = NN.knn(tree, X, k + 1, true) # we ignore the distance to the 'self' point, important to sort!
+    ignore_self = vecvec -> map(vec -> vec[2:end], vecvec)
+    ignore_self(idxs), ignore_self(dists)
+end
+
+"""
+    NNTemplate
+
+A template used to share common nearest neighbors parameters across detectors.
+"""
+NNTemplate = Template(:(mutable struct KNNTemplate
+    metric::DI.Metric = DI.Euclidean()
+    algorithm::Symbol = :kdtree::(_ in (:kdtree, :balltree))
+    leafsize::Integer = 10::(_ ≥ 0)
+    reorder::Bool = true
+    parallel::Bool = false
+end))

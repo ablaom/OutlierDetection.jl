@@ -1,22 +1,20 @@
-using Tables:matrix
-
 """
     UnsupervisedDetector
 
 This abstract type forms the basis for all implemented unsupervised outlier detection algorithms. To implement a new
 `UnsupervisedDetector` yourself, you have to implement the `fit(detector, X)::Fit` and
-`score(detector, model, X)::Result` methods. 
+`score(detector, model, X)::Scores` methods. 
 """
-abstract type UnsupervisedDetector <: MMI.Unsupervised end
+abstract type UnsupervisedDetector <: MMI.Probabilistic end
 
 """
     SupervisedDetector
 
 This abstract type forms the basis for all implemented supervised outlier detection algorithms. To implement a new
 `SupervisedDetector` yourself, you have to implement the `fit(detector, X, y)::Fit` and
-`score(detector, model, X)::Result` methods. 
+`score(detector, model, X)::Scores` methods. 
 """
-abstract type SupervisedDetector <: MMI.Deterministic end
+abstract type SupervisedDetector <: MMI.Probabilistic end
 
 """
     Detector::Union{<:SupervisedDetector, <:UnsupervisedDetector}
@@ -98,6 +96,13 @@ A vector of labels with `-1` indicating an outlier and `1` indicating an inlier.
 const _detector = """    detector::Detector
 Any [`UnsupervisedDetector`](@ref) or [`SupervisedDetector`](@ref) implementation."""
 
+const _default_params = """  normalize::Function (train::Scores, test::Scores) -> Scores
+A function of type that maps training and test scores to normalized scores.
+
+    outlier_fraction::Real
+The fraction of outliers (number between 0 and 1) in the data is used to determine the score threshold to classify the
+samples into inliers and outliers."""
+
 _score_unsupervised(name::String) = """
 ```julia
 using OutlierDetection: $name, fit, score
@@ -156,8 +161,8 @@ Examples
 --------
 $(_score_unsupervised("KNN"))
 """ # those definitions apply when X is not already a (transposed) abstract array
-fit(detector::UnsupervisedDetector, X) = fit(detector, matrix(X; transpose=true)) # unsupervised call syntax
-fit(detector::SupervisedDetector, X, y) = fit(detector, matrix(X; transpose=true), y)
+fit(detector::UnsupervisedDetector, X) = fit(detector, MMI.matrix(X; transpose=true)) # unsupervised call syntax
+fit(detector::SupervisedDetector, X, y) = fit(detector, MMI.matrix(X; transpose=true), y)
 
 """
     score(detector,
@@ -178,14 +183,18 @@ $_input_data
 
 Returns
 ----------
-    result::Result
+    scores::Scores
 Tuple of the achieved outlier scores of the given train and test data.
 
 Examples
 --------
 $(_score_unsupervised("KNN"))
 """ # definition applies when X is not already a (transposed) abstract array
-score(detector::Detector, fitresult::Fit, X) = score(detector, fitresult, matrix(X; transpose=true))
+score(detector::Detector, fitresult::Fit, X) = score(detector, fitresult, MMI.matrix(X; transpose=true))
+
+function score_norm(detector::Detector, fitresult::Fit, X)
+    detector.normalization
+end
 
 """
     detect(classifier,
@@ -199,7 +208,7 @@ Parameters
     classifier::Classifier
 A [`Classifier`](@ref) that implements the [`detect`](@ref) method.
 
-    result::Result...
+    scores::Scores...
 One or more [`score`](@ref) results (tuples) or alternatively a single vector of scores or two vectors, where the first
 vector represents train scores and the second vector test scores.
 
@@ -215,40 +224,3 @@ $_classifier
 detect(classifier::Classifier, scores_train::Scores) = detect(classifier, (scores_train, scores_train))
 detect(classifier::Classifier, scores_train::Scores, scores_test::Scores) =
     detect(classifier, (scores_train, scores_test))
-
-"""
-    @score
-
-Helps with the definition of [`score`](@ref) for detectors, by unpacking the `.model` field of the second argument
-directly into the argument and implicitly returning the values of the `.scores` field as the first tuple element of the
-returned expression.
-"""
-macro score(fn)
-    fn = MacroTools.longdef(fn)
-    @capture(fn, function f_(detector_, result_::Fit, X_::Data)::Result body_ end) || error("Expected a function with
-    three parameters f(`detector<:Detector`, `result::Fit`, `X::Data`)::Result and fully specified types.") 
-    copy_result = :copy_result_unique_name
-
-    # implicitly return the scores as the first tuple element for all return
-    return_count = 0
-    body = MacroTools.postwalk(body) do x
-        @capture(x, ret_return) || return x
-        # count the return
-        return_count += 1
-
-        # get the return expression
-        ret_expr = ret.args[1]
-        return :(($copy_result.scores, $(ret_expr)))
-    end
-
-    # check if there are any returns were found, if not, use the last body expression
-    if return_count == 0
-        body = :(($copy_result.scores, $(body.args[end])))
-    end
-
-    :(function $f($detector, $result::Fit, $X::Data)
-        $copy_result = $result;
-        $result = $result.model;
-        $body 
-    end)
-end

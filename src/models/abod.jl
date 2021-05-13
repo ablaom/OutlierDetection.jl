@@ -18,10 +18,14 @@ the paper, that is, it uses the variance of angles to its nearest neighbors, not
 
 Parameters
 ----------
-$_knn_params
+$_k_param
 
     enhanced::Bool
 When `enhanced=true`, it uses the enhanced ABOD (EABOD) adaptation proposed by [2].
+
+$_knn_params
+
+$_default_params
 
 Examples
 --------
@@ -35,13 +39,8 @@ data.
 [2] Li, Xiaojie; Lv, Jian Cheng; Cheng, Dongdong (2015): Angle-Based Outlier Detection Algorithm with More Stable
 Relationships.
 """
-MMI.@mlj_model mutable struct ABOD <: UnsupervisedDetector
+@detector_model mutable struct ABOD <: UnsupervisedDetector
     k::Integer = 5::(_ > 0)
-    metric::DI.Metric = DI.Euclidean()
-    algorithm::Symbol = :kdtree::(_ in (:kdtree, :balltree))
-    leafsize::Integer = 10::(_ ≥ 0)
-    reorder::Bool = true
-    parallel::Bool = false
     enhanced::Bool = false
 end
 
@@ -55,12 +54,13 @@ end
 function fit(detector::ABOD, X::Data)::Fit
     # use tree to calculate distances
     tree = buildTree(X, detector.metric, detector.algorithm, detector.leafsize, detector.reorder)
-    idxs, _ = NN.knn(tree, X, detector.k)
+    idxs, _ = knn_others(tree, X, detector.k)
     scores = detector.enhanced ? _eabod(X, X, idxs, detector.k) : _abod(X, X, idxs, detector.k)
     Fit(ABODModel(X, tree), scores)
 end
 
-@score function score(detector::ABOD, model::Fit, X::Data)::Result
+function score(detector::ABOD, fitresult::Fit, X::Data)::Scores
+    model = fitresult.model
     # TODO: We could also paralellize the abod score calculation.
     if detector.parallel
         idxs, _ = knn_parallel(model.tree, X, detector.k)

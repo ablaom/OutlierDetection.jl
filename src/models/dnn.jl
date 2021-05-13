@@ -10,10 +10,12 @@ resulting outlier scores to labels, thus this implementation does not fully refl
 
 Parameters
 ----------
-$_knn_params
-
     d::Real
 The hypersphere radius used to calculate the global density of an instance.
+
+$_knn_params
+
+$_default_params
 
 Examples
 --------
@@ -23,12 +25,7 @@ References
 ----------
 [1] Knorr, Edwin M.; Ng, Raymond T. (1998): Algorithms for Mining Distance-Based Outliers in Large Datasets.
 """
-MMI.@mlj_model mutable struct DNN <: UnsupervisedDetector
-    metric::DI.Metric = DI.Euclidean()
-    algorithm::Symbol = :kdtree::(_ in (:kdtree, :balltree))
-    leafsize::Integer = 10::(_ ≥ 0)
-    reorder::Bool = true
-    parallel::Bool = false
+@detector_model NNTemplate mutable struct DNN <: UnsupervisedDetector
     d::Real = 0::(_ > 0) # warns if `d` is not set
 end
 
@@ -41,20 +38,27 @@ function fit(detector::DNN, X::Data)::Fit
     tree = buildTree(X, detector.metric, detector.algorithm, detector.leafsize, detector.reorder)
 
     # use tree to calculate distances
-    scores = _dnn(NN.inrange(tree, X, detector.d))
+    scores = dnn_others(NN.inrange(tree, X, detector.d))
     Fit(DNNModel(tree), scores)
 end
 
-@score function score(detector::DNN, model::Fit, X::Data)::Result
+function score(detector::DNN, fitresult::Fit, X::Data)::Scores
+    model = fitresult.model
     if detector.parallel
         # already returns scores
         return dnn_parallel(model.tree, X, detector.d)
     else
-        return _dnn(NN.inrange(model.tree, X, detector.d))
+        return dnn(NN.inrange(model.tree, X, detector.d))
     end
 end
 
-@inline function _dnn(idxs::AbstractVector{<:AbstractVector})::Scores
+@inline function dnn(idxs::AbstractVector{<:AbstractVector})::Scores
     # Helper function to reduce the instances to a global density score.
-    1 ./ (length.(idxs) .+ 1e-10)
+    1 ./ (length.(idxs) .+ 0.1) # min score = 0, max_score = 10
+end
+
+@inline function dnn_others(idxs::AbstractVector{<:AbstractVector})::Scores
+    # Remove the (self) point previously added when fitting the tree, otherwise during `fit`, that point would always
+    # be included in the density estimation
+    1 ./ (length.(idxs) .- 0.9) # 1 - 0.1
 end

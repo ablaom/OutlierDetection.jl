@@ -13,7 +13,11 @@ the notion of local outliers and was developed by Breunig et al., see [1].
 
 Parameters
 ----------
+$_k_param
+
 $_knn_params
+
+$_default_params
 
 Examples
 --------
@@ -24,13 +28,8 @@ References
 [1] Breunig, Markus M.; Kriegel, Hans-Peter; Ng, Raymond T.; Sander, Jörg (2000): LOF: Identifying Density-Based Local
 Outliers.
 """
-MMI.@mlj_model mutable struct LOF <: UnsupervisedDetector
+@detector_model NNTemplate mutable struct LOF <: UnsupervisedDetector
     k::Integer = 5::(_ > 0)
-    metric::DI.Metric = DI.Euclidean()
-    algorithm::Symbol = :kdtree::(_ in (:kdtree, :balltree))
-    leafsize::Integer = 10::(_ ≥ 0)
-    reorder::Bool = true
-    parallel::Bool = false
 end
 
 struct LOFModel <: Model
@@ -46,7 +45,7 @@ function fit(detector::LOF, X::Data)::Fit
     tree = buildTree(X, detector.metric, detector.algorithm, detector.leafsize, detector.reorder)
 
     # use tree to calculate distances
-    idxs, dists = NN.knn(tree, X, detector.k, true)
+    idxs, dists = knn_others(tree, X, detector.k)
 
     # transform dists (vec of vec) to matrix to allow faster indexing later
     ndists = reduce(hcat, dists)
@@ -60,7 +59,8 @@ function fit(detector::LOF, X::Data)::Fit
     Fit(LOFModel(tree, ndists, lrds), scores)
 end
 
-@score function score(detector::LOF, model::Fit, X::Data)::Result
+function score(detector::LOF, fitresult::Fit, X::Data)::Scores
+    model = fitresult.model
     if detector.parallel
         idxs, dists = knn_parallel(model.tree, X, detector.k, true)
         return _lof(idxs, dists, model.ndists, model.lrds, detector.k)

@@ -42,9 +42,9 @@ Implements the `score` method for an underlying python model.
 """
 function pyod_score(modelname)
     quote
-        function score(_::$modelname, model::Fit, X::Data)::Result
+        function score(_::$modelname, fitresult::Fit, X::Data)::Result
             Xt = PyReverseDims(X) # change from column-major to row-major
-            scores_test = model.model.pyobject.decision_function(Xt)
+            scores_test = fitresult.model.pyobject.decision_function(Xt)
             return model.scores, scores_test
         end
     end
@@ -57,16 +57,16 @@ corresponding to the model constructor (see [`_model_constructor`](@ref)).
 """
 function py_constructor(expr)
     # similar to @mlj_model
-    expr, modelname, params, defaults, constraints = MMI._process_model_def(@__MODULE__, expr)
+    expr, modelname, params, defaults, constraints = MLJModelInterface._process_model_def(@__MODULE__, expr)
 
     # keyword constructor
-    const_expr = MMI._model_constructor(modelname, params, defaults)
+    const_expr = MLJModelInterface._model_constructor(modelname, params, defaults)
 
     # associate the constructor with the definition of the struct
     push!(expr.args[3].args, const_expr)
 
     # cleaner
-    clean_expr = MMI._model_cleaner(modelname, defaults, constraints)
+    clean_expr = MLJModelInterface._model_cleaner(modelname, defaults, constraints)
 
     # return
     return modelname, params, clean_expr, expr

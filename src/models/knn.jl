@@ -10,11 +10,15 @@ Calculate the anomaly score of an instance based on the distance to its k-neares
 
 Parameters
 ----------
-$_knn_params
+$_k_param
 
     reduction::Symbol
 One of `(:maximum, :median, :mean)`. (`reduction=:maximum`) was proposed by [1]. Angiulli et al. [2] proposed sum to
 reduce the distances, but mean has been implemented for numerical stability.
+
+$_knn_params
+
+$_default_params
 
 Examples
 --------
@@ -27,13 +31,8 @@ Sets.
 
 [2] Angiulli, Fabrizio; Pizzuti, Clara (2002): Fast Outlier Detection in High Dimensional Spaces.
 """
-MMI.@mlj_model mutable struct KNN <: UnsupervisedDetector
+@detector_model NNTemplate mutable struct KNN <: UnsupervisedDetector
     k::Integer = 5::(_ > 0)
-    metric::DI.Metric = DI.Euclidean()
-    algorithm::Symbol = :kdtree::(_ in (:kdtree, :balltree))
-    leafsize::Integer = 10::(_ ≥ 0)
-    reorder::Bool = true
-    parallel::Bool = false
     reduction::Symbol = :maximum::(_ in (:maximum, :median, :mean))
 end
 
@@ -46,14 +45,15 @@ function fit(detector::KNN, X::Data)::Fit
     tree = buildTree(X, detector.metric, detector.algorithm, detector.leafsize, detector.reorder)
 
     # use tree to calculate distances
-    idxs, dists = NN.knn(tree, X, detector.k)
+    _, dists = knn_others(tree, X, detector.k)
 
-    # reduce distances to outlier score
+    # reduce distances to outlier score and ignore first distance (distance to self)
     scores = _knn(dists, detector.reduction)
     Fit(KNNModel(tree), scores)
 end
 
-@score function score(detector::KNN, model::Fit, X::Data)::Result
+function score(detector::KNN, fitresult::Fit, X::Data)::Scores
+    model = fitresult.model
     if detector.parallel
         idxs, dists = knn_parallel(model.tree, X, detector.k)
         return _knn(dists, detector.reduction)

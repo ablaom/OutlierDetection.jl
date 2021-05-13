@@ -31,6 +31,8 @@ Weighting parameter of the assistent loss function to define the consistency bet
     noise::Function (AbstractArray{T} -> AbstractArray{T})
 A function to be applied to a batch of input data to add noise, see [1] for an explanation.
 
+$_default_params
+
 Examples
 --------
 $(_score_supervised("ESAD"))
@@ -40,7 +42,7 @@ References
 [1] Huang, Chaoqin; Ye, Fei; Zhang, Ya; Wang, Yan-Feng; Tian, Qi (2020): ESAD: End-to-end Deep Semi-supervised Anomaly
 Detection.
 """
-MMI.@mlj_model mutable struct ESAD <: SupervisedDetector
+@detector_model mutable struct ESAD <: SupervisedDetector
     encoder::Chain = Chain()
     decoder::Chain = Chain()
     batchsize::Integer = 32::(_ > 0)
@@ -75,8 +77,8 @@ function fit(detector::ESAD, X::Data, y::Labels)::Fit
     Fit(ESADModel(model), scores)
 end
 
-@score function score(_::ESAD, model::Fit, X::Data)::Result
-    _esadscore(model.chain[1:2](X), X, model.chain(X), ndims(X))
+function score(_::ESAD, fitresult::Fit, X::Data)::Scores
+    _esadscore(fitresult.model.chain[1:2](X), X, fitresult.model.chain(X), ndims(X))
 end
 
 function _esadloss(x̂, x, ẑ, z, y, λ1, λ2, noise, dims)

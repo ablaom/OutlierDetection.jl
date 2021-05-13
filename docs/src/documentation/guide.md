@@ -28,7 +28,6 @@ Let's see how the data looks like in a typical outlier detection task. We use th
 Data::AbstractArray{<:Real}
 Scores::AbstractVector{<:Real}
 Labels::AbstractVector{<:Integer}
-Result::Tuple{Scores, Scores}
 ```
 
 Because train scores are essential in classification, we often work with tuples of training and test scores and call such a tuple a `Result`. One last previously unmentioned structure is the `Fit` result, a `struct` that bundles the learned model and training scores. Let's now looks how the methods defined by OutlierDetection.jl transform the mentioned data structures.
@@ -36,8 +35,7 @@ Because train scores are essential in classification, we often work with tuples 
 ```julia
 fit(::UnsupervisedDetector, ::Data)::Fit
 fit(::SupervisedDetector, ::Data, ::Labels)::Fit
-score(::Detector, ::Fit, ::Data)::Result
-detect(::Classifier, ::Result...)::Labels
+score(::Detector, ::Fit, ::Data)::Scores
 ```
 
 One last thing to note is that there are many convenience data transformations implemented. You can use any [Tables.jl](https://github.com/JuliaData/Tables.jl) compatible data source and the framework will make sure that the detectors receive the data in the suitable form. Also, note that `detect` can work with arbitrarily many results, which is very convenient if you want to combine the results of different detectors.
@@ -56,6 +54,5 @@ From a usage perspective, the main differences are:
 - A `Detector` is bound to data, either through `machine(::UnsupervisedDetector, X)`, or `machine(::SupervisedDetector, X, y)`.
 - `fit(::Detector, X, [y])` becomes `fit!(machine)`
 - `score(::Detector, ::Fit, X)` becomes `transform(machine)`
-- `detect(::Classifier, ::Results...)` becomes `transform(machine(::Classifier), ::Results...)`
 
 Take a look at [Using MLJ](../../documentation/using-mlj/) to learn more.
