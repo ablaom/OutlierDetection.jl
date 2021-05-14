@@ -613,18 +613,6 @@
   
   
     <li class="md-nav__item">
-      <a href="../../API/classifiers/" class="md-nav__link">
-        Classifiers
-      </a>
-    </li>
-  
-
-          
-            
-  
-  
-  
-    <li class="md-nav__item">
       <a href="../../API/detectors/" class="md-nav__link">
         Detectors
       </a>
@@ -742,15 +730,14 @@ train, test = eachindex(y)[1:n_train], eachindex(y)[n_train+1:end]
 <p>Evaluate the resulting training data scores (stored in the fit result).</p>
 <div class="highlight"><pre><span></span><code><span class="n">roc_auc</span><span class="p">(</span><span class="n">y</span><span class="p">[</span><span class="n">train</span><span class="p">],</span> <span class="n">fitresult</span><span class="o">.</span><span class="n">scores</span><span class="p">)</span>
 </code></pre></div>
-<p>Calculate the outlier scores for our test data. Note that we always return both the train and test scores because later used <a href="../../API/base/#OutlierDetection.Classifier">classifiers</a> typically choose a threshold based on the train scores.</p>
+<p>Calculate the outlier scores for our test data. Note that we always return both the train and test scores because later used <a href="../../API/base/#OutlierDetection.Evaluator">evaluators</a> typically choose a threshold based on the train scores.</p>
 <div class="highlight"><pre><span></span><code><span class="n">scores_train</span><span class="p">,</span> <span class="n">scores_test</span> <span class="o">=</span> <span class="n">score</span><span class="p">(</span><span class="n">detector</span><span class="p">,</span> <span class="n">fitresult</span><span class="p">,</span> <span class="n">X</span><span class="p">[</span><span class="n">test</span><span class="p">,</span> <span class="o">:</span><span class="p">]</span><span class="o">&#39;</span><span class="p">)</span>
 </code></pre></div>
 <p>Evaluate the resulting test scores with the given labels.</p>
 <div class="highlight"><pre><span></span><code><span class="n">roc_auc</span><span class="p">(</span><span class="n">y</span><span class="p">[</span><span class="n">test</span><span class="p">],</span> <span class="n">scores_test</span><span class="p">)</span>
 </code></pre></div>
-<p>You can easily convert the obtained scores into inlier (<code>1</code>), and outlier (<code>-1</code>) labels using a <a href="../../API/base/#OutlierDetection.Classifier"><code>Classifier</code></a>, in this case, <a href="../../API/classifiers/#OutlierDetection.Binarize"><code>Binarize</code></a>.</p>
-<div class="highlight"><pre><span></span><code><span class="n">clf</span> <span class="o">=</span> <span class="n">Binarize</span><span class="p">()</span>
-<span class="n">detect</span><span class="p">(</span><span class="n">clf</span><span class="p">,</span> <span class="n">scores_train</span><span class="p">,</span> <span class="n">scores_test</span><span class="p">)</span>
+<p>You can easily convert the obtained scores into inlier (<code>1</code>), and outlier (<code>-1</code>) labels using an <a href="@ref"><code>Evaluator</code></a>, in this case, <a href="../../API/classifiers/#OutlierDetection.Class"><code>Class</code></a>.</p>
+<div class="highlight"><pre><span></span><code><span class="n">detect</span><span class="p">(</span><span class="n">Class</span><span class="p">(),</span> <span class="n">scores_train</span><span class="p">,</span> <span class="n">scores_test</span><span class="p">)</span>
 </code></pre></div>
 <p><a id='Using-MLJ'></a></p>
 <p><a id='Using-MLJ-1'></a></p>
@@ -760,7 +747,7 @@ train, test = eachindex(y)[1:n_train], eachindex(y)[n_train+1:end]
 <div class="highlight"><pre><span></span><code><span class="k">using</span> <span class="n">MLJ</span> <span class="c"># or MLJBase</span>
 </code></pre></div>
 <p>Create a pipeline consisting of a detector and classifier.</p>
-<div class="highlight"><pre><span></span><code><span class="n">pipe</span> <span class="o">=</span> <span class="nd">@pipeline</span> <span class="n">KNN</span><span class="p">(</span><span class="n">k</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span> <span class="n">Binarize</span><span class="p">()</span>
+<div class="highlight"><pre><span></span><code><span class="n">pipe</span> <span class="o">=</span> <span class="nd">@pipeline</span> <span class="n">KNN</span><span class="p">(</span><span class="n">k</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span> <span class="n">Class</span><span class="p">()</span>
 </code></pre></div>
 <p>Bind the pipeline to data to create a machine.</p>
 <div class="highlight"><pre><span></span><code><span class="n">mach</span> <span class="o">=</span> <span class="n">machine</span><span class="p">(</span><span class="n">pipe</span><span class="p">,</span> <span class="n">X</span><span class="p">)</span>

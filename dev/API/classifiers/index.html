@@ -211,15 +211,13 @@
         
   
   
-    
-  
 
 
   
   
   
     <li class="md-tabs__item">
-      <a href="../base/" class="md-tabs__link md-tabs__link--active">
+      <a href="../base/" class="md-tabs__link">
         API
       </a>
     </li>
@@ -529,14 +527,12 @@
 
   
   
-    
-  
   
     
-    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--nested">
       
       
-        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_4" type="checkbox" id="__nav_4" checked>
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_4" type="checkbox" id="__nav_4" >
       
       <label class="md-nav__link" for="__nav_4">
         API
@@ -557,58 +553,6 @@
       <a href="../base/" class="md-nav__link">
         Base
       </a>
-    </li>
-  
-
-          
-            
-  
-  
-    
-  
-  
-    <li class="md-nav__item md-nav__item--active">
-      
-      <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
-      
-      
-        
-      
-      
-        <label class="md-nav__link md-nav__link--active" for="__toc">
-          Classifiers
-          <span class="md-nav__icon md-icon"></span>
-        </label>
-      
-      <a href="./" class="md-nav__link md-nav__link--active">
-        Classifiers
-      </a>
-      
-        
-<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
-  
-  
-  
-    
-  
-  
-    <label class="md-nav__title" for="__toc">
-      <span class="md-nav__icon md-icon"></span>
-      Table of contents
-    </label>
-    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#binarize" class="md-nav__link">
-    Binarize
-  </a>
-  
-</li>
-      
-    </ul>
-  
-</nav>
-      
     </li>
   
 
@@ -681,8 +625,8 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#binarize" class="md-nav__link">
-    Binarize
+  <a href="#class" class="md-nav__link">
+    Class
   </a>
   
 </li>
@@ -708,42 +652,41 @@
 <p><a id='Classifiers-1'></a></p>
 <h1 id="classifiers">Classifiers</h1>
 <p>Detectors assign a real-valued outlier score to each instance. A classifier simply takes the training and test scores of one or more detectors and converts them to binary labels (classes). The classes in outlier detection traditionally consist of <code>1</code> for inliers, <code>-1</code> for outliers.</p>
-<p><a id='Binarize'></a></p>
-<p><a id='Binarize-1'></a></p>
-<h2 id="binarize">Binarize</h2>
-<p><a id='OutlierDetection.Binarize' href='#OutlierDetection.Binarize'>#</a>
-<strong><code>OutlierDetection.Binarize</code></strong> &mdash; <em>Type</em>.</p>
-<div class="highlight"><pre><span></span><code><span class="n">Binarize</span><span class="p">(</span><span class="n">outlier_fraction</span> <span class="o">=</span> <span class="mf">0.1</span><span class="p">,</span>
-         <span class="n">combine</span> <span class="o">=</span> <span class="n">combine</span><span class="p">,</span>           
-         <span class="n">normalize</span> <span class="o">=</span> <span class="n">normalize</span><span class="p">,</span>
-         <span class="n">classify</span> <span class="o">=</span> <span class="n">classify</span><span class="p">)</span>
+<p><a id='Class'></a></p>
+<p><a id='Class-1'></a></p>
+<h2 id="class">Class</h2>
+<p><a id='OutlierDetection.Class' href='#OutlierDetection.Class'>#</a>
+<strong><code>OutlierDetection.Class</code></strong> &mdash; <em>Type</em>.</p>
+<div class="highlight"><pre><span></span><code><span class="n">Class</span><span class="p">(</span><span class="n">outlier_fraction</span> <span class="o">=</span> <span class="mf">0.1</span><span class="p">,</span>
+      <span class="n">classify</span> <span class="o">=</span> <span class="n">classify</span><span class="p">,</span>
+      <span class="n">combine</span> <span class="o">=</span> <span class="n">combine</span><span class="p">,</span>           
+      <span class="n">normalize</span> <span class="o">=</span> <span class="n">normalize</span><span class="p">)</span>
 </code></pre></div>
-<p>A flexible, percentile-thresholding classifier that maps the outlier scores of a single or multiple outlier detection models to binary classes, where <code>1</code> represents inliers and <code>-1</code> represents outliers.</p>
+<p>A flexible, quantile-thresholding classifier that maps the outlier scores of a single or multiple outlier detection models to binary classes, where <code>1</code> represents inliers and <code>-1</code> represents outliers.</p>
 <p><strong>Parameters</strong></p>
 <div class="highlight"><pre><span></span><code>outlier_fraction::Float64
 </code></pre></div>
 <p>The fraction of outliers (number between 0 and 1) in the data is used to determine the score threshold to classify the samples into inliers and outliers.</p>
-<div class="highlight"><pre><span></span><code>combine::Function
-</code></pre></div>
-<p>A function to reduce a matrix, where each row represents an instance and each column represents a score of specific detector, to a vector of scores for each instance. See <code>combine</code> for a specific implementation. <em>Note:</em> This function is not called if the input to the classifier consists of a single train/test scores tuple.</p>
-<div class="highlight"><pre><span></span><code>normalize::Union{Function, Nothing}
-</code></pre></div>
-<p>A function to reduce a matrix, where each row represents an instance and each column a score of specific detector, to a vector of scores for each instance. See <a href="../evaluation/#OutlierDetection.normalize"><code>normalize</code></a> for a specific implementation.</p>
 <div class="highlight"><pre><span></span><code>classify::Union{Function, Nothing}
 </code></pre></div>
 <p>A function to transform a vector of scores to a vector of bits, where 1 represents an outlier and 0 represents a normal instance. <em>Hint:</em> Sometimes you don't want to transform your scores to classes, e.g. in ROC AUC evaluation, where you can use <code>no_classify</code> to pass along the reduced (raw) scores. See <a href="../evaluation/#OutlierDetection.classify"><code>classify</code></a> for a specific implementation.</p>
+<div class="highlight"><pre><span></span><code>combine::Function
+</code></pre></div>
+<p>A function to reduce a matrix, where each row represents an instance and each column represents a score of specific detector, to a vector of scores for each instance. See <code>combine</code> for a specific implementation. <em>Note:</em> This function is not called if the input to the evaluator consists of a single train/test scores tuple.</p>
+<div class="highlight"><pre><span></span><code>normalize::Union{Function, Nothing}
+</code></pre></div>
+<p>A function to reduce a matrix, where each row represents an instance and each column a score of specific detector, to a vector of scores for each instance. See <a href="../evaluation/#OutlierDetection.normalize"><code>normalize</code></a> for a specific implementation.</p>
 <p><strong>Examples</strong></p>
-<div class="highlight"><pre><span></span><code><span class="k">using</span> <span class="n">OutlierDetection</span><span class="o">:</span> <span class="n">Binarize</span><span class="p">,</span> <span class="n">KNN</span><span class="p">,</span> <span class="n">fit</span><span class="p">,</span> <span class="n">score</span>
+<div class="highlight"><pre><span></span><code><span class="k">using</span> <span class="n">OutlierDetection</span><span class="o">:</span> <span class="n">Class</span><span class="p">,</span> <span class="n">KNN</span><span class="p">,</span> <span class="n">fit</span><span class="p">,</span> <span class="n">score</span>
 <span class="n">detector</span> <span class="o">=</span> <span class="n">KNN</span><span class="p">()</span>
 <span class="n">X</span> <span class="o">=</span> <span class="n">rand</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span>
 <span class="n">model</span> <span class="o">=</span> <span class="n">fit</span><span class="p">(</span><span class="n">detector</span><span class="p">,</span> <span class="n">X</span><span class="p">)</span>
 <span class="n">train_scores</span><span class="p">,</span> <span class="n">test_scores</span> <span class="o">=</span> <span class="n">score</span><span class="p">(</span><span class="n">detector</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <span class="n">X</span><span class="p">)</span>
-<span class="n">clf</span> <span class="o">=</span> <span class="n">Binarize</span><span class="p">()</span>
-<span class="n">ŷ</span> <span class="o">=</span> <span class="n">detect</span><span class="p">(</span><span class="n">clf</span><span class="p">,</span> <span class="n">train_scores</span><span class="p">,</span> <span class="n">test_scores</span><span class="p">)</span>
+<span class="n">ŷ</span> <span class="o">=</span> <span class="n">detect</span><span class="p">(</span><span class="n">Class</span><span class="p">(),</span> <span class="n">train_scores</span><span class="p">,</span> <span class="n">test_scores</span><span class="p">)</span>
 <span class="c"># or, if using multiple detectors</span>
-<span class="c"># ŷ = detect(clf, (train1, test1), (train2, test2), ...)</span>
+<span class="c"># ŷ = detect(Class(), (train1, test1), (train2, test2), ...)</span>
 </code></pre></div>
-<p><a target='_blank' href='https://github.com/davnn/OutlierDetection.jl/blob/2815c8c1cae5ddcf1e1bf1a183aa99acf0b549c8/src/evaluate/classifier.jl#LL1-L33' class='documenter-source'>source</a><br></p>
+<p><a target='_blank' href='https://github.com/davnn/OutlierDetection.jl/blob/7e5f9ad55dc8f52dc3c559939c7460b8d59691e0/src/evaluate/evaluate.jl#LL19-L37' class='documenter-source'>source</a><br></p>
                 
               
               
@@ -759,39 +702,6 @@
       
         
 <footer class="md-footer">
-  
-    <nav class="md-footer__inner md-grid" aria-label="Footer">
-      
-        <a href="../base/" class="md-footer__link md-footer__link--prev" rel="prev">
-          <div class="md-footer__button md-icon">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
-          </div>
-          <div class="md-footer__title">
-            <div class="md-ellipsis">
-              <span class="md-footer__direction">
-                Previous
-              </span>
-              Base
-            </div>
-          </div>
-        </a>
-      
-      
-        <a href="../detectors/" class="md-footer__link md-footer__link--next" rel="next">
-          <div class="md-footer__title">
-            <div class="md-ellipsis">
-              <span class="md-footer__direction">
-                Next
-              </span>
-              Detectors
-            </div>
-          </div>
-          <div class="md-footer__button md-icon">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11H4z"/></svg>
-          </div>
-        </a>
-      
-    </nav>
   
   <div class="md-footer-meta md-typeset">
     <div class="md-footer-meta__inner md-grid">

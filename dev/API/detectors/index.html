@@ -564,18 +564,6 @@
             
   
   
-  
-    <li class="md-nav__item">
-      <a href="../classifiers/" class="md-nav__link">
-        Classifiers
-      </a>
-    </li>
-  
-
-          
-            
-  
-  
     
   
   
@@ -805,7 +793,7 @@
                 <p><a id='Detectors'></a></p>
 <p><a id='Detectors-1'></a></p>
 <h1 id="detectors">Detectors</h1>
-<p>A <a href="../base/#OutlierDetection.Detector"><code>Detector</code></a> is just a mutable collection of hyperparameters. Each detector implements a <a href="../base/#OutlierDetection.fit"><code>fit</code></a> and <a href="../base/#OutlierDetection.score"><code>score</code></a> method, where <em>fit</em> refers to learning a model from training data and <em>score</em> refers to using a learned model to calculate outlier scores of new data. Detectors typically do not classify samples; that's why a classifier is used to convert the scores into binary labels, see <a href="../classifiers/#OutlierDetection.Binarize"><code>Binarize</code></a> for example.</p>
+<p>A <a href="../base/#OutlierDetection.Detector"><code>Detector</code></a> is just a mutable collection of hyperparameters. Each detector implements a <a href="../base/#OutlierDetection.fit"><code>fit</code></a> and <a href="../base/#OutlierDetection.score"><code>score</code></a> method, where <em>fit</em> refers to learning a model from training data and <em>score</em> refers to using a learned model to calculate outlier scores of new data. Detectors typically do not classify samples; that's why a classifier is used to convert the scores into binary labels, see <a href="../classifiers/#OutlierDetection.Class"><code>Class</code></a> for example.</p>
 <p><a id='ABOD'></a></p>
 <p><a id='ABOD-1'></a></p>
 <h2 id="abod">ABOD</h2>
@@ -853,7 +841,7 @@
 <p><strong>References</strong></p>
 <p>[1] Kriegel, Hans-Peter; S hubert, Matthias; Zimek, Arthur (2008): Angle-based outlier detection in high-dimensional data.</p>
 <p>[2] Li, Xiaojie; Lv, Jian Cheng; Cheng, Dongdong (2015): Angle-Based Outlier Detection Algorithm with More Stable Relationships.</p>
-<p><a target='_blank' href='https://github.com/davnn/OutlierDetection.jl/blob/2815c8c1cae5ddcf1e1bf1a183aa99acf0b549c8/src/models/abod.jl#LL5-L37' class='documenter-source'>source</a><br></p>
+<p><a target='_blank' href='https://github.com/davnn/OutlierDetection.jl/blob/7e5f9ad55dc8f52dc3c559939c7460b8d59691e0/src/models/abod.jl#LL5-L39' class='documenter-source'>source</a><br></p>
 <p><a id='AE'></a></p>
 <p><a id='AE-1'></a></p>
 <h2 id="ae">AE</h2>
@@ -903,7 +891,7 @@
 </code></pre></div>
 <p><strong>References</strong></p>
 <p>[1] Aggarwal, Charu C. (2017): Outlier Analysis.</p>
-<p><a target='_blank' href='https://github.com/davnn/OutlierDetection.jl/blob/2815c8c1cae5ddcf1e1bf1a183aa99acf0b549c8/src/models/ae.jl#LL8-L34' class='documenter-source'>source</a><br></p>
+<p><a target='_blank' href='https://github.com/davnn/OutlierDetection.jl/blob/7e5f9ad55dc8f52dc3c559939c7460b8d59691e0/src/models/ae.jl#LL8-L34' class='documenter-source'>source</a><br></p>
 <p><a id='COF'></a></p>
 <p><a id='COF-1'></a></p>
 <h2 id="cof">COF</h2>
@@ -945,7 +933,7 @@
 </code></pre></div>
 <p><strong>References</strong></p>
 <p>[1] Tang, Jian; Chen, Zhixiang; Fu, Ada Wai-Chee; Cheung, David Wai-Lok (2002): Enhancing Effectiveness of Outlier Detections for Low Density Patterns.</p>
-<p><a target='_blank' href='https://github.com/davnn/OutlierDetection.jl/blob/2815c8c1cae5ddcf1e1bf1a183aa99acf0b549c8/src/models/cof.jl#LL1-L23' class='documenter-source'>source</a><br></p>
+<p><a target='_blank' href='https://github.com/davnn/OutlierDetection.jl/blob/7e5f9ad55dc8f52dc3c559939c7460b8d59691e0/src/models/cof.jl#LL1-L25' class='documenter-source'>source</a><br></p>
 <p><a id='DeepSAD'></a></p>
 <p><a id='DeepSAD-1'></a></p>
 <h2 id="deepsad">DeepSAD</h2>
@@ -1009,13 +997,14 @@
 </code></pre></div>
 <p><strong>References</strong></p>
 <p>[1] Ruff, Lukas; Vandermeulen, Robert A.; Görnitz, Nico; Binder, Alexander; Müller, Emmanuel; Müller, Klaus-Robert; Kloft, Marius (2019): Deep Semi-Supervised Anomaly Detection.</p>
-<p><a target='_blank' href='https://github.com/davnn/OutlierDetection.jl/blob/2815c8c1cae5ddcf1e1bf1a183aa99acf0b549c8/src/models/deepsad.jl#LL5-L50' class='documenter-source'>source</a><br></p>
+<p><a target='_blank' href='https://github.com/davnn/OutlierDetection.jl/blob/7e5f9ad55dc8f52dc3c559939c7460b8d59691e0/src/models/deepsad.jl#LL5-L50' class='documenter-source'>source</a><br></p>
 <p><a id='DNN'></a></p>
 <p><a id='DNN-1'></a></p>
 <h2 id="dnn">DNN</h2>
 <p><a id='OutlierDetection.DNN' href='#OutlierDetection.DNN'>#</a>
 <strong><code>OutlierDetection.DNN</code></strong> &mdash; <em>Type</em>.</p>
-<div class="highlight"><pre><span></span><code><span class="n">DNN</span><span class="p">(</span><span class="n">metric</span> <span class="o">=</span> <span class="n">Euclidean</span><span class="p">(),</span>
+<div class="highlight"><pre><span></span><code><span class="n">DNN</span><span class="p">(</span><span class="n">d</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
+    <span class="n">metric</span> <span class="o">=</span> <span class="n">Euclidean</span><span class="p">(),</span>
     <span class="n">algorithm</span> <span class="o">=</span> <span class="o">:</span><span class="n">kdtree</span><span class="p">,</span>
     <span class="n">leafsize</span> <span class="o">=</span> <span class="mi">10</span><span class="p">,</span>
     <span class="n">reorder</span> <span class="o">=</span> <span class="kc">true</span><span class="p">,</span>
@@ -1023,9 +1012,9 @@
 </code></pre></div>
 <p>Anomaly score based on the number of neighbors in a hypersphere of radius <code>d</code>. Knorr et al. [1] directly converted the resulting outlier scores to labels, thus this implementation does not fully reflect the approach from the paper.</p>
 <p><strong>Parameters</strong></p>
-<div class="highlight"><pre><span></span><code>k::Integer
+<div class="highlight"><pre><span></span><code>d::Real
 </code></pre></div>
-<p>Number of neighbors (must be greater than 0).</p>
+<p>The hypersphere radius used to calculate the global density of an instance.</p>
 <div class="highlight"><pre><span></span><code>metric::Metric
 </code></pre></div>
 <p>This is one of the Metric types defined in the Distances.jl package. It is possible to define your own metrics by creating new types that are subtypes of Metric.</p>
@@ -1041,9 +1030,6 @@
 <div class="highlight"><pre><span></span><code>parallel::Bool
 </code></pre></div>
 <p>Parallelize <code>score</code> and <code>predict</code> using all threads available. The number of threads can be set with the <code>JULIA_NUM_THREADS</code> environment variable. Note: <code>fit</code> is not parallel.</p>
-<div class="highlight"><pre><span></span><code>d::Real
-</code></pre></div>
-<p>The hypersphere radius used to calculate the global density of an instance.</p>
 <p><strong>Examples</strong></p>
 <div class="highlight"><pre><span></span><code><span class="k">using</span> <span class="n">OutlierDetection</span><span class="o">:</span> <span class="n">DNN</span><span class="p">,</span> <span class="n">fit</span><span class="p">,</span> <span class="n">score</span>
 <span class="n">detector</span> <span class="o">=</span> <span class="n">DNN</span><span class="p">()</span>
@@ -1053,7 +1039,7 @@
 </code></pre></div>
 <p><strong>References</strong></p>
 <p>[1] Knorr, Edwin M.; Ng, Raymond T. (1998): Algorithms for Mining Distance-Based Outliers in Large Datasets.</p>
-<p><a target='_blank' href='https://github.com/davnn/OutlierDetection.jl/blob/2815c8c1cae5ddcf1e1bf1a183aa99acf0b549c8/src/models/dnn.jl#LL1-L25' class='documenter-source'>source</a><br></p>
+<p><a target='_blank' href='https://github.com/davnn/OutlierDetection.jl/blob/7e5f9ad55dc8f52dc3c559939c7460b8d59691e0/src/models/dnn.jl#LL1-L26' class='documenter-source'>source</a><br></p>
 <p><a id='ESAD'></a></p>
 <p><a id='ESAD-1'></a></p>
 <h2 id="esad">ESAD</h2>
@@ -1112,7 +1098,7 @@
 </code></pre></div>
 <p><strong>References</strong></p>
 <p>[1] Huang, Chaoqin; Ye, Fei; Zhang, Ya; Wang, Yan-Feng; Tian, Qi (2020): ESAD: End-to-end Deep Semi-supervised Anomaly Detection.</p>
-<p><a target='_blank' href='https://github.com/davnn/OutlierDetection.jl/blob/2815c8c1cae5ddcf1e1bf1a183aa99acf0b549c8/src/models/esad.jl#LL6-L42' class='documenter-source'>source</a><br></p>
+<p><a target='_blank' href='https://github.com/davnn/OutlierDetection.jl/blob/7e5f9ad55dc8f52dc3c559939c7460b8d59691e0/src/models/esad.jl#LL6-L42' class='documenter-source'>source</a><br></p>
 <p><a id='KNN'></a></p>
 <p><a id='KNN-1'></a></p>
 <h2 id="knn">KNN</h2>
@@ -1158,7 +1144,7 @@
 <p><strong>References</strong></p>
 <p>[1] Ramaswamy, Sridhar; Rastogi, Rajeev; Shim, Kyuseok (2000): Efficient Algorithms for Mining Outliers from Large Data Sets.</p>
 <p>[2] Angiulli, Fabrizio; Pizzuti, Clara (2002): Fast Outlier Detection in High Dimensional Spaces.</p>
-<p><a target='_blank' href='https://github.com/davnn/OutlierDetection.jl/blob/2815c8c1cae5ddcf1e1bf1a183aa99acf0b549c8/src/models/knn.jl#LL1-L29' class='documenter-source'>source</a><br></p>
+<p><a target='_blank' href='https://github.com/davnn/OutlierDetection.jl/blob/7e5f9ad55dc8f52dc3c559939c7460b8d59691e0/src/models/knn.jl#LL1-L31' class='documenter-source'>source</a><br></p>
 <p><a id='LOF'></a></p>
 <p><a id='LOF-1'></a></p>
 <h2 id="lof">LOF</h2>
@@ -1200,7 +1186,7 @@
 </code></pre></div>
 <p><strong>References</strong></p>
 <p>[1] Breunig, Markus M.; Kriegel, Hans-Peter; Ng, Raymond T.; Sander, Jörg (2000): LOF: Identifying Density-Based Local Outliers.</p>
-<p><a target='_blank' href='https://github.com/davnn/OutlierDetection.jl/blob/2815c8c1cae5ddcf1e1bf1a183aa99acf0b549c8/src/models/lof.jl#LL3-L26' class='documenter-source'>source</a><br></p>
+<p><a target='_blank' href='https://github.com/davnn/OutlierDetection.jl/blob/7e5f9ad55dc8f52dc3c559939c7460b8d59691e0/src/models/lof.jl#LL3-L28' class='documenter-source'>source</a><br></p>
                 
               
               
@@ -1219,7 +1205,7 @@
   
     <nav class="md-footer__inner md-grid" aria-label="Footer">
       
-        <a href="../classifiers/" class="md-footer__link md-footer__link--prev" rel="prev">
+        <a href="../base/" class="md-footer__link md-footer__link--prev" rel="prev">
           <div class="md-footer__button md-icon">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
           </div>
@@ -1228,7 +1214,7 @@
               <span class="md-footer__direction">
                 Previous
               </span>
-              Classifiers
+              Base
             </div>
           </div>
         </a>
