@@ -23,8 +23,8 @@ function MMI.predict_mode(detector::Detector, fitresult::Fit, X)
 end
 
 function MMI.transform(ev::Scores, _, scores::Tuple{Score, Score}...) # _ because there is no fitresult
-    _, scores_test = to_scores(ev.normalize, ev.combine, scores...)
-    univariate_finite(scores_test)
+   scores_train, scores_test = to_scores(ev.normalize, ev.combine, scores...)
+    univariate_finite(scores_train), univariate_finite(scores_test)
 end
 
 function MMI.transform(ev::Labels, _, scores::Tuple{Score, Score}...) # _ because there is no fitresult
