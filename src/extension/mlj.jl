@@ -47,7 +47,11 @@ end
 
 # helper to convert scores to univariate finite
 function univariate_finite(scores::Score)
-    MMI.UnivariateFinite([CLASS_NORMAL, CLASS_OUTLIER], scores; augment=true, pool=missing, ordered=false)
+    MMI.UnivariateFinite([CLASS_NORMAL, CLASS_OUTLIER],
+                         scores;
+                         augment=true,
+                         pool=missing,
+                         ordered=true)
 end
 
 # specify scitypes
